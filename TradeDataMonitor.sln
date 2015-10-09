@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitor", "TradeDataMonitor\TradeDataMonitor.csproj", "{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitorTest", "TradeDataMonitorTest\TradeDataMonitorTest.csproj", "{2177A527-039B-464A-BD89-F0D758CE1B20}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2177A527-039B-464A-BD89-F0D758CE1B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2177A527-039B-464A-BD89-F0D758CE1B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2177A527-039B-464A-BD89-F0D758CE1B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2177A527-039B-464A-BD89-F0D758CE1B20}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
