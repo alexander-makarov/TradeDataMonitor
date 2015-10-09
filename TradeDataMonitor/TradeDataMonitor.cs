@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TradeDataMonitoring
 {
@@ -21,8 +22,8 @@ namespace TradeDataMonitoring
         private readonly string _monitoringDirectory;
         public bool IsMonitoringStarted { get; private set; }
 
-        public TradeDataMonitor(IFileSystemManager fileSystemManager, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, string monitoringDirectory)
-            : this(fileSystemManager, tradeDataLoader, timerPeriodSeconds, new TimerAdaper(), monitoringDirectory)
+        public TradeDataMonitor(ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, string monitoringDirectory)
+            : this(new FileSystemManager(), tradeDataLoader, timerPeriodSeconds, new TimerAdaper(), monitoringDirectory)
         {
         }
         public TradeDataMonitor(IFileSystemManager fileSystemManager, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, ITimer timer, string monitoringDirectory)
@@ -47,7 +48,40 @@ namespace TradeDataMonitoring
 
         private void OnTimerTick(object state)
         {
+            //var t = new Task(() =>
+            //{
+            //    const string correctCsvString = "2000-5-20,30.16,30.39,30.02,30.17,1478200";
+            //    var corectValues = correctCsvString.Split(',');
+            //    var data1 = TradeData.Parse(corectValues);
+            //    var p = new TradeDataPackage();
+            //    for (int i = 0; i < 3; i++)
+            //    {
+            //        p.Package.Add(data1);
+            //        data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
+            //            data1.Volume);
+
+            //    }
+            //    OnTradeDataUpdate(p);
+            //});
+            //var t2 = new Task(() =>
+            //{
+            //    const string correctCsvString = "1999-5-20,30.16,30.39,30.02,30.17,1478200";
+            //    var corectValues = correctCsvString.Split(',');
+            //    var data1 = TradeData.Parse(corectValues);
+            //    var p = new TradeDataPackage();
+            //    for (int i = 0; i < 3; i++)
+            //    {
+            //        p.Package.Add(data1);
+            //        data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
+            //            data1.Volume);
+
+            //    }
+            //    OnTradeDataUpdate(p);
+            //});
+            //t.Start();
+            //t2.Start();
             CheckUpdates();
+            
 
             _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
         }
@@ -62,6 +96,22 @@ namespace TradeDataMonitoring
 
         private void CheckUpdates()
         {
+            //test
+            const string correctCsvString = "2013-5-20,30.16,30.39,30.02,30.17,1478200";
+            var corectValues = correctCsvString.Split(',');
+            var data1 = TradeData.Parse(corectValues);
+            var p = new TradeDataPackage();
+            for (int i = 0; i < 3; i++)
+            {
+                p.Package.Add(data1);
+                data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
+                    data1.Volume);
+
+            }
+            OnTradeDataUpdate(p);
+            return;
+            //test
+
             var now = DateTime.UtcNow;
             var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory);
             _lastCheckUpdates = now;

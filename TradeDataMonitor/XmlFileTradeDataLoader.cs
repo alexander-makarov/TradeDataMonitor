@@ -34,7 +34,7 @@ namespace TradeDataMonitoring
                 dataList.Add(data);
             }
 
-            return new TradeDataPackage { Package = dataList };
+            return new TradeDataPackage(dataList);
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿<Window x:Class="TradeDataMonitorApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <ListView x:Name="TradeDataUpdates"  Margin="10,5,5,5" ItemsSource="{Binding Path=TradeDataList}" BorderThickness="0" VirtualizingStackPanel.IsVirtualizing="True">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Date" DisplayMemberBinding="{Binding Path=Date, StringFormat=d}"/>
+                    <GridViewColumn Width="Auto" Header="Open" DisplayMemberBinding="{Binding Path=Open}"/>
+                    <GridViewColumn Width="Auto" Header="High" DisplayMemberBinding="{Binding Path=High}"/>
+                    <GridViewColumn Width="Auto" Header="Low" DisplayMemberBinding="{Binding Path=Low}"/>
+                    <GridViewColumn Width="Auto" Header="Close" DisplayMemberBinding="{Binding Path=Close}"/>
+                    <GridViewColumn Header="Volume" DisplayMemberBinding="{Binding Path=Volume}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

@@ -29,7 +29,7 @@ namespace TradeDataMonitoring
                 }
             }
 
-            return new TradeDataPackage { Package = dataList };
+            return new TradeDataPackage(dataList);
         }
     }
 }
