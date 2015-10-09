@@ -3,25 +3,35 @@ using System.Threading;
 
 namespace TradeDataMonitoring
 {
+    /// <summary>
+    /// 
+    /// 
+    /// <remarks>Current implementation based on System.Threading.Timer,
+    /// however for any further extensive development on files monitoring functionality,
+    /// one might find useful to look at FileSystemWatcher class:
+    /// https://msdn.microsoft.com/en-us/library/system.io.filesystemwatcher(v=vs.110).aspx </remarks>
+    /// </summary>
     public class TradeDataMonitor
     {
-        private readonly IFileSystem _fileSystem;
+        private readonly IFileSystemManager _fileSystemManager;
         private readonly ITradeDataLoader _tradeDataLoader;
         private DateTime _lastCheckUpdates = DateTime.MinValue;
         private readonly ITimer _timer;
         private readonly int _timerPeriodSeconds = 5;
+        private readonly string _monitoringDirectory;
         public bool IsMonitoringStarted { get; private set; }
 
-        public TradeDataMonitor(IFileSystem fileSystem, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds)
-            : this(fileSystem, tradeDataLoader, timerPeriodSeconds, new TimerAdaper())
+        public TradeDataMonitor(IFileSystemManager fileSystemManager, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, string monitoringDirectory)
+            : this(fileSystemManager, tradeDataLoader, timerPeriodSeconds, new TimerAdaper(), monitoringDirectory)
         {
         }
-        public TradeDataMonitor(IFileSystem fileSystem, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, ITimer timer)
+        public TradeDataMonitor(IFileSystemManager fileSystemManager, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, ITimer timer, string monitoringDirectory)
         {
-            _fileSystem = fileSystem;
+            _fileSystemManager = fileSystemManager;
             _tradeDataLoader = tradeDataLoader;
             _timerPeriodSeconds = timerPeriodSeconds;
             _timer = timer;
+            _monitoringDirectory = monitoringDirectory;
             IsMonitoringStarted = false;
         }
 
@@ -50,10 +60,10 @@ namespace TradeDataMonitoring
             if (handler != null) handler(obj);
         }
 
-        public void CheckUpdates()
+        private void CheckUpdates()
         {
             var now = DateTime.UtcNow;
-            var files = _fileSystem.GetNewFiles(_lastCheckUpdates);
+            var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory);
             _lastCheckUpdates = now;
 
             // TODO: parallel loading of trade data from files

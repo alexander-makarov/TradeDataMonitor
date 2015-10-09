@@ -1,8 +1,10 @@
-﻿namespace TradeDataMonitoring
+﻿using System.IO;
+
+namespace TradeDataMonitoring
 {
     public interface ITradeDataLoader
     {
-        bool CouldLoad(FileMetadata file);
-        TradeDataPackage LoadTradeData(FileMetadata file);
+        bool CouldLoad(FileInfo file);
+        TradeDataPackage LoadTradeData(FileInfo file);
     }
 }

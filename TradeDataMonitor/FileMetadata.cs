@@ -2,6 +2,6 @@ namespace TradeDataMonitoring
 {
     public struct FileMetadata
     {
-        public string FileName { get; set; }
+        public string FullPath { get; set; }
     }
 }
