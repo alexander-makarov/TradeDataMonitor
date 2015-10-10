@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using TradeDataMonitoring;
 
-namespace TradeDataMonitoring
+namespace XmlFileTradeData
 {
     public class XmlFileTradeDataLoader : ITradeDataLoader
     {

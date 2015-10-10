@@ -38,6 +38,7 @@
       <HintPath>..\packages\NLog.4.1.2\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,6 +57,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Configuration\TradeDataLoaderElement.cs" />
+    <Compile Include="Configuration\TradeDataLoaderElementCollection.cs" />
+    <Compile Include="Configuration\TradeDataLoadersSection.cs" />
     <Compile Include="MvvmHelpers\RelayCommand.cs" />
     <Compile Include="MvvmHelpers\NotifyPropertyChangedInvocatorAttribute.cs" />
     <Compile Include="ViewModels\TradeDataMonitorViewModel.cs" />

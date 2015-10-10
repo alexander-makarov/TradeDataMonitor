@@ -96,35 +96,35 @@ namespace TradeDataMonitoring
 
         private void CheckUpdates()
         {
-            //test
-            const string correctCsvString = "2013-5-20,30.16,30.39,30.02,30.17,1478200";
-            var corectValues = correctCsvString.Split(',');
-            var data1 = TradeData.Parse(corectValues);
-            var p = new TradeDataPackage();
-            for (int i = 0; i < 3; i++)
-            {
-                p.Package.Add(data1);
-                data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
-                    data1.Volume);
+            ////test
+            //const string correctCsvString = "2013-5-20,30.16,30.39,30.02,30.17,1478200";
+            //var corectValues = correctCsvString.Split(',');
+            //var data1 = TradeData.Parse(corectValues);
+            //var p = new TradeDataPackage();
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    p.Package.Add(data1);
+            //    data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
+            //        data1.Volume);
 
-            }
-            OnTradeDataUpdate(p);
-            return;
-            //test
+            //}
+            //OnTradeDataUpdate(p);
+            //return;
+            ////test
 
             var now = DateTime.UtcNow;
             var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory);
             _lastCheckUpdates = now;
-
-            // TODO: parallel loading of trade data from files
-            foreach (var file in files)
-            {
-                if (_tradeDataLoader.CouldLoad(file))
+            
+            Parallel.ForEach(files, 
+                (file) =>
                 {
-                    var data = _tradeDataLoader.LoadTradeData(file);
-                    OnTradeDataUpdate(data);
-                }
-            }
+                    if (_tradeDataLoader.CouldLoad(file))
+                    {
+                        var data = _tradeDataLoader.LoadTradeData(file);
+                        OnTradeDataUpdate(data);
+                    }
+                });
         }
     }
 }
