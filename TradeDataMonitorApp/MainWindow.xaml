@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TradeDataMonitorApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Simple Trade Data Updates Monitor" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
@@ -9,11 +9,11 @@
             <RowDefinition Height="20"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <!--IsEnabled="{Binding DC.Status, Converter={StaticResource ConnectionStatusToBoolConverter}}"-->
         <StackPanel x:Name="TopPanel">
             <TextBox x:Name="Login" IsReadOnly="true" Background="WhiteSmoke" Text="{Binding MonitoringDirectory, Mode=OneWay}" Height="23" Margin="10,5,5,0" />
             <Button x:Name="TestRequestButton"
                     Content="{Binding MonitoringStartStopButtonContent}" Margin="10,5,5,0" Padding="2" 
+                    IsEnabled="{Binding MonitoringStartStopButtonEnabled}"
                     Command="{Binding MonitoringStartStopCommand}"
                     Background="{Binding MonitoringStartStopButtonBackground}"
                      />

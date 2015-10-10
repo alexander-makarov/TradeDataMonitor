@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,16 +16,16 @@ namespace TradeDataMonitorApp.ViewModels
 {
     public class TradeDataMonitorViewModel : ViewModelBase
     {
-        private readonly TradeDataMonitor _monitor;
-        public TradeDataMonitorViewModel(TradeDataMonitor monitor)
+        private readonly TradeDataMonitor _tradeDataMonitor;
+        public TradeDataMonitorViewModel(TradeDataMonitor tradeDataMonitor)
         {
-            _monitor = monitor;
-            _monitor.TradeDataUpdate += MonitorOnTradeDataUpdate;
+            _tradeDataMonitor = tradeDataMonitor;
+            _tradeDataMonitor.TradeDataUpdate += TradeDataMonitorOnTradeDataUpdate;
 
             InitCommands();
         }
 
-        private void MonitorOnTradeDataUpdate(TradeDataPackage tradeDataPackage)
+        private void TradeDataMonitorOnTradeDataUpdate(TradeDataPackage tradeDataPackage)
         {
             Application.Current.Dispatcher.Invoke(() => tradeDataPackage.Package.ForEach(data => _tradeDataList.Add(data)));
         }
@@ -44,11 +45,11 @@ namespace TradeDataMonitorApp.ViewModels
 
         public string MonitoringDirectory
         {
-            get { return _monitor.MonitoringDirectory; }
+            get { return _tradeDataMonitor.MonitoringDirectory; }
         }
 
-        private const string MonitoringStartText = "Start monitoring directory";
-        private const string MonitoringStopText = "Stop monitoring directory";
+        private const string MonitoringStartText = "Start monitoring the directory for updates";
+        private const string MonitoringStopText = "Stop monitoring the directory for updates";
         private string _monitoringStartStopButtonContent = MonitoringStartText;
         public string MonitoringStartStopButtonContent
         {
@@ -65,6 +66,7 @@ namespace TradeDataMonitorApp.ViewModels
         private readonly static SolidColorBrush MonitoringStartBackground = new SolidColorBrush(Colors.PaleGreen);
         private readonly static SolidColorBrush MonitoringStopBackground = new SolidColorBrush(Colors.PaleVioletRed);
         private SolidColorBrush _monitoringStartStopButtonBackground = MonitoringStartBackground;
+
         public SolidColorBrush MonitoringStartStopButtonBackground
         {
             get { return _monitoringStartStopButtonBackground; }
@@ -76,25 +78,12 @@ namespace TradeDataMonitorApp.ViewModels
             }
         }
 
-        private bool _isBusy = false;
-        public bool IsBusy
-        {
-            get
-            {
-                return _isBusy;
-            }
-            set
-            {
-                _isBusy = value;
-                OnPropertyChanged();
-            }
-        }
 
-        private string _busyContent = "";
-        public string BusyContent
+        private bool _monitoringStartStopButtonEnabled = true;
+        public bool MonitoringStartStopButtonEnabled
         {
-            get { return _busyContent; }
-            set { _busyContent = value; OnPropertyChanged(); }
+            get { return _monitoringStartStopButtonEnabled; }
+            set { _monitoringStartStopButtonEnabled = value; OnPropertyChanged(); }
         }
 
         #region Commands
@@ -109,28 +98,32 @@ namespace TradeDataMonitorApp.ViewModels
 
         public void MonitoringStartStop(object o)
         {
-            if (_monitor.IsMonitoringStarted) // если уже соединены
+            if (_tradeDataMonitor.IsMonitoringStarted) // 
             {
-                _monitor.PropertyChanged += (obj, e) =>
-                {
-                    if (e.PropertyName == "IsMonitoringStarted" && _monitor.IsMonitoringStarted == false)
-                    {
-                        MonitoringStartStopButtonContent = MonitoringStartText;
-                        MonitoringStartStopButtonBackground = MonitoringStartBackground;
-                        IsBusy = false;
-                    }
-                };
-                BusyContent = "Await on active file reading operations...";
-                IsBusy = true;
-                _monitor.StopMonitor();
+                _tradeDataMonitor.PropertyChanged += WaitTillIsMonitoringStartedIsFalse; 
+                MonitoringStartStopButtonContent = "Will stop monitoring. Await on active file reading operations...";
+                MonitoringStartStopButtonEnabled = false;
+                _tradeDataMonitor.StopMonitoring();
             }
             else
             {
-                _monitor.StartMonitor();
+                _tradeDataMonitor.StartMonitoring();
                 MonitoringStartStopButtonContent = MonitoringStopText;
                 MonitoringStartStopButtonBackground = MonitoringStopBackground;
             }
         }
+
+        private void WaitTillIsMonitoringStartedIsFalse(object o, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsMonitoringStarted" && _tradeDataMonitor.IsMonitoringStarted == false)
+            {
+                MonitoringStartStopButtonContent = MonitoringStartText;
+                MonitoringStartStopButtonBackground = MonitoringStartBackground;
+                _tradeDataMonitor.PropertyChanged -= WaitTillIsMonitoringStartedIsFalse;
+                MonitoringStartStopButtonEnabled = true;
+            }
+        }
+
         #endregion
     }
 }

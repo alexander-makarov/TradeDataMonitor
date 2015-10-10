@@ -58,7 +58,7 @@ namespace TradeDataMonitoring
             IsMonitoringStarted = false;
         }
 
-        public void StartMonitor()
+        public void StartMonitoring()
         {
             if (!IsMonitoringStarted)
             {
@@ -69,47 +69,22 @@ namespace TradeDataMonitoring
 
         private void OnTimerTick(object state)
         {
-            //var t = new Task(() =>
-            //{
-            //    const string correctCsvString = "2000-5-20,30.16,30.39,30.02,30.17,1478200";
-            //    var corectValues = correctCsvString.Split(',');
-            //    var data1 = TradeData.Parse(corectValues);
-            //    var p = new TradeDataPackage();
-            //    for (int i = 0; i < 3; i++)
-            //    {
-            //        p.Package.Add(data1);
-            //        data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
-            //            data1.Volume);
-
-            //    }
-            //    OnTradeDataUpdate(p);
-            //});
-            //var t2 = new Task(() =>
-            //{
-            //    const string correctCsvString = "1999-5-20,30.16,30.39,30.02,30.17,1478200";
-            //    var corectValues = correctCsvString.Split(',');
-            //    var data1 = TradeData.Parse(corectValues);
-            //    var p = new TradeDataPackage();
-            //    for (int i = 0; i < 3; i++)
-            //    {
-            //        p.Package.Add(data1);
-            //        data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
-            //            data1.Volume);
-
-            //    }
-            //    OnTradeDataUpdate(p);
-            //});
-            //t.Start();
-            //t2.Start();
-            CheckUpdates();
-
-            if (!_stopRequestToken)
+            lock (_syncObj)
             {
-                _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
-            }
-            else
-            {
-                IsMonitoringStarted = false;
+                if (!IsMonitoringStarted)
+                    return;
+
+                CheckUpdates();
+
+                if (!_stopMonitoringRequestToken)
+                {
+                    _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
+                }
+                else
+                {
+                    IsMonitoringStarted = false;
+                    _stopMonitoringRequestToken = false;
+                }
             }
         }
 
@@ -162,12 +137,32 @@ namespace TradeDataMonitoring
                 });
         }
 
-        private bool _stopRequestToken = false;
+        private bool _stopMonitoringRequestToken = false;
         private bool _isMonitoringStarted;
+        private readonly object _syncObj = new object();
 
-        public void StopMonitor()
+        public void StopMonitoring()
         {
-            _stopRequestToken = true;
+            bool acquired = false;
+            try
+            {
+                acquired = Monitor.TryEnter(_syncObj);
+                if (acquired)
+                {
+                    IsMonitoringStarted = false;
+                }
+                else
+                {
+                    _stopMonitoringRequestToken = true;
+                }
+            }
+            finally
+            {
+                if (acquired)
+                {
+                    Monitor.Exit(_syncObj);
+                }
+            }
         }
     }
 }

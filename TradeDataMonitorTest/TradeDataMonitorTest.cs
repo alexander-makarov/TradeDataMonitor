@@ -52,7 +52,7 @@ namespace TradeDataMonitorTest
         //    };
 
         //    // act
-        //    monitor.StartMonitor();
+        //    monitor.StartMonitoring();
 
         //    // assert
         //    Assert.IsTrue(updateEventHasBeenFired, "TradeDataUpdateEvent has not been fired");
@@ -74,7 +74,7 @@ namespace TradeDataMonitorTest
         //    };
 
         //    // act
-        //    monitor.StartMonitor();
+        //    monitor.StartMonitoring();
 
         //    // assert
         //    Assert.IsFalse(updateEventHasBeenFired, "TradeDataUpdateEvent has been fired");
