@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Xml;
 using TradeDataMonitoring;
 
@@ -9,7 +10,7 @@ namespace XmlFileTradeData
     {
         public bool CouldLoad(FileInfo file)
         {
-            return file.Extension == "xml";
+            return file.Extension == ".xml";
         }
 
         public TradeDataPackage LoadTradeData(FileInfo file)
@@ -20,21 +21,23 @@ namespace XmlFileTradeData
             using (var bs = new BufferedStream(fs))
             using (XmlReader reader = XmlReader.Create(bs))
             {
-                reader.ReadToFollowing("value");
-                var valuesArray = new string[6];
-                reader.MoveToFirstAttribute();
-                valuesArray[0] = reader.Value;
-
-                int i = 1;
-                while (reader.MoveToNextAttribute())
+                while (reader.ReadToFollowing("value"))
                 {
-                    valuesArray[i++] = reader.Value;
+                    var valuesArray = new string[6];
+                    reader.MoveToFirstAttribute();
+                    valuesArray[0] = reader.Value;
+
+                    int i = 1;
+                    while (reader.MoveToNextAttribute())
+                    {
+                        valuesArray[i++] = reader.Value;
+                    }
+
+                    var data = TradeData.Parse(valuesArray);
+                    dataList.Add(data);
                 }
-
-                var data = TradeData.Parse(valuesArray);
-                dataList.Add(data);
             }
-
+            Thread.Sleep(15000);
             return new TradeDataPackage(dataList);
         }
     }

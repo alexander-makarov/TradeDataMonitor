@@ -8,7 +8,7 @@ namespace TradeDataMonitoring
     {
         public bool CouldLoad(FileInfo file)
         {
-            return file.Extension == "csv";
+            return file.Extension == ".csv";
         }
 
         public TradeDataPackage LoadTradeData(FileInfo file)

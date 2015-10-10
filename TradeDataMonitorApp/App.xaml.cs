@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using TradeDataMonitorApp.Configuration;
@@ -59,36 +55,13 @@ namespace TradeDataMonitorApp
         /// <returns>Загруженный тип</returns>
         public static Type LoadTypeFromAssembly(string fileName, string className)
         {
-            try
+            Assembly a = Assembly.LoadFrom(fileName);
+            var type = a.GetType(className);
+            if (type == null)
             {
-                Assembly a = Assembly.LoadFrom(fileName);
-                var type = a.GetType(className);
-                if (type == null)
-                {
-                    throw new Exception(String.Format("Класс '{0}' в сборке '{1}' не найден", className, fileName));
-                }
-                return type;
+                throw new Exception(String.Format("Класс '{0}' в сборке '{1}' не найден", className, fileName));
             }
-            catch (ReflectionTypeLoadException exc)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("Ошибка загрузки типа '{0}' из сборки '{1}'.", className, fileName);
-                if (exc.LoaderExceptions != null && exc.LoaderExceptions.Length > 0)
-                {
-                    sb.AppendLine();
-                    foreach (Exception e in exc.LoaderExceptions)
-                    {
-                        sb.AppendLine("-------------------");
-                        sb.AppendLine(e.ToString());
-                    }
-                }
-                throw new Exception(sb.ToString(), exc);
-            }
-            catch (Exception exc)
-            {
-                throw new Exception(String.Format("Ошибка загрузки типа '{0}' из сборки '{1}'", className, fileName),
-                                    exc);
-            }
+            return type;
         }
 
         /// <summary>
@@ -108,7 +81,7 @@ namespace TradeDataMonitorApp
             }
             catch (Exception exc)
             {
-                throw new Exception(String.Format("Ошибка загрузки экземпляра класса '{0}' из сборки '{1}': {2}", className, fileName, exc.Message),
+                throw new Exception(String.Format("Error on creating instance of class '{0}' from '{1}' : {2}", className, fileName, exc.Message),
                                     exc);
             }
         }

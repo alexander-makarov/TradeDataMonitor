@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,15 +14,34 @@ namespace TradeDataMonitoring
     /// one might find useful to look at FileSystemWatcher class:
     /// https://msdn.microsoft.com/en-us/library/system.io.filesystemwatcher(v=vs.110).aspx </remarks>
     /// </summary>
-    public class TradeDataMonitor
+    public class TradeDataMonitor : INotifyPropertyChanged
     {
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
         private readonly IFileSystemManager _fileSystemManager;
         private readonly ITradeDataLoader _tradeDataLoader;
         private DateTime _lastCheckUpdates = DateTime.MinValue;
         private readonly ITimer _timer;
         private readonly int _timerPeriodSeconds = 5;
         private readonly string _monitoringDirectory;
-        public bool IsMonitoringStarted { get; private set; }
+
+        public string MonitoringDirectory { get { return _monitoringDirectory; } }
+
+
+        public bool IsMonitoringStarted
+        {
+            get { return _isMonitoringStarted; }
+            private set { _isMonitoringStarted = value; OnPropertyChanged();}
+        }
 
         public TradeDataMonitor(ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, string monitoringDirectory)
             : this(new FileSystemManager(), tradeDataLoader, timerPeriodSeconds, new TimerAdaper(), monitoringDirectory)
@@ -32,6 +53,7 @@ namespace TradeDataMonitoring
             _tradeDataLoader = tradeDataLoader;
             _timerPeriodSeconds = timerPeriodSeconds;
             _timer = timer;
+            _timer.Init(OnTimerTick, null, Timeout.Infinite, Timeout.Infinite);
             _monitoringDirectory = monitoringDirectory;
             IsMonitoringStarted = false;
         }
@@ -41,7 +63,6 @@ namespace TradeDataMonitoring
             if (!IsMonitoringStarted)
             {
                 IsMonitoringStarted = true;
-                _timer.Init(OnTimerTick, null, Timeout.Infinite, Timeout.Infinite);
                 _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
             }
         }
@@ -81,9 +102,15 @@ namespace TradeDataMonitoring
             //t.Start();
             //t2.Start();
             CheckUpdates();
-            
 
-            _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
+            if (!_stopRequestToken)
+            {
+                _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
+            }
+            else
+            {
+                IsMonitoringStarted = false;
+            }
         }
 
         public event Action<TradeDataPackage> TradeDataUpdate;
@@ -94,6 +121,12 @@ namespace TradeDataMonitoring
             if (handler != null) handler(obj);
         }
 
+        /// <summary>
+        /// 
+        /// <remarks>
+        /// For now, we track new files by creation time, and don't delete any of them,
+        /// another option might be to delete files once they have been processed</remarks>
+        /// </summary>
         private void CheckUpdates()
         {
             ////test
@@ -116,15 +149,25 @@ namespace TradeDataMonitoring
             var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory);
             _lastCheckUpdates = now;
             
+            // go for parallel file processing:
             Parallel.ForEach(files, 
                 (file) =>
                 {
+                    // for any new file check if we could load data from it
                     if (_tradeDataLoader.CouldLoad(file))
                     {
-                        var data = _tradeDataLoader.LoadTradeData(file);
-                        OnTradeDataUpdate(data);
+                        var data = _tradeDataLoader.LoadTradeData(file); // load data
+                        OnTradeDataUpdate(data); // notify about update
                     }
                 });
+        }
+
+        private bool _stopRequestToken = false;
+        private bool _isMonitoringStarted;
+
+        public void StopMonitor()
+        {
+            _stopRequestToken = true;
         }
     }
 }

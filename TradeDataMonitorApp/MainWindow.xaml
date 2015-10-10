@@ -3,7 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <ListView x:Name="TradeDataUpdates"  Margin="10,5,5,5" ItemsSource="{Binding Path=TradeDataList}" BorderThickness="0" VirtualizingStackPanel.IsVirtualizing="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="*" ></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--IsEnabled="{Binding DC.Status, Converter={StaticResource ConnectionStatusToBoolConverter}}"-->
+        <StackPanel x:Name="TopPanel">
+            <TextBox x:Name="Login" IsReadOnly="true" Background="WhiteSmoke" Text="{Binding MonitoringDirectory, Mode=OneWay}" Height="23" Margin="10,5,5,0" />
+            <Button x:Name="TestRequestButton"
+                    Content="{Binding MonitoringStartStopButtonContent}" Margin="10,5,5,0" Padding="2" 
+                    Command="{Binding MonitoringStartStopCommand}"
+                    Background="{Binding MonitoringStartStopButtonBackground}"
+                     />
+        </StackPanel>
+        
+        <ListView x:Name="TradeDataUpdates" Grid.Row="1"  Margin="10,5,5,5" ItemsSource="{Binding Path=TradeDataList}" BorderThickness="0" VirtualizingStackPanel.IsVirtualizing="True">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Date" DisplayMemberBinding="{Binding Path=Date, StringFormat=d}"/>
@@ -15,5 +31,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        
+        <StatusBar Grid.Row="2">
+            <Label Content="{Binding Path=Status}"></Label>
+        </StatusBar>
     </Grid>
 </Window>

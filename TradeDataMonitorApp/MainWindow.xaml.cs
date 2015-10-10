@@ -13,11 +13,7 @@ namespace TradeDataMonitorApp
         public MainWindow(ViewModelBase viewModel)
         {
             InitializeComponent();
-
-            //ConfigurationManager.AppSettings["MonitoringDirectoryPath"]
-            //var m = new TradeDataMonitor(new CsvFileTradeDataLoader(), 5, "C:\\trade-data-test");
-
-            DataContext = viewModel; // new TradeDataMonitorViewModel(m);
+            DataContext = viewModel;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TradeDataMonitoring
         public IEnumerable<FileInfo> GetNewFilesFromDirectory(DateTime createdLater, string directoryPath)
         {
             var info = new DirectoryInfo(directoryPath);
-            var files = info.GetFiles().Where(f => f.CreationTime > createdLater);
+            var files = info.GetFiles().Where(f => f.CreationTimeUtc > createdLater);
             return files;
         }
     }

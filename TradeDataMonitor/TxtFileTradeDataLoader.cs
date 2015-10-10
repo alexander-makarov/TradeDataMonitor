@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace TradeDataMonitoring
 {
@@ -7,7 +8,7 @@ namespace TradeDataMonitoring
     {
         public bool CouldLoad(FileInfo file)
         {
-            return file.Extension == "txt";
+            return file.Extension == ".txt";
         }
 
         public TradeDataPackage LoadTradeData(FileInfo file)
@@ -22,11 +23,12 @@ namespace TradeDataMonitoring
                 sr.ReadLine(); // skip the first line with columns names
                 while ((line = sr.ReadLine()) != null)
                 {
-                    var arr = line.Split(',');
+                    var arr = line.Split(';');
                     var data = TradeData.Parse(arr);
                     dataList.Add(data);
                 }
             }
+            Thread.Sleep(7000);
 
             return new TradeDataPackage(dataList);
         }
