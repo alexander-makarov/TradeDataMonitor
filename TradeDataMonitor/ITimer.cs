@@ -2,6 +2,9 @@
 
 namespace TradeDataMonitoring
 {
+    /// <summary>
+    /// Interface to mock System.Threading.Timer
+    /// </summary>
     public interface ITimer
     {
         /// <summary>

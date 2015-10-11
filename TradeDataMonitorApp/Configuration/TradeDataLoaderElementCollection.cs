@@ -2,6 +2,10 @@
 
 namespace TradeDataMonitorApp.Configuration
 {
+    /// <summary>
+    /// TradeDataLoaderElementCollection configuration element collection class. 
+    /// <remarks>http://www.codeproject.com/Articles/16466/Unraveling-the-Mysteries-of-NET-Configuration</remarks>
+    /// </summary>
     [ConfigurationCollection(typeof(TradeDataLoaderElement),
         CollectionType = ConfigurationElementCollectionType.AddRemoveClearMap)]
     public class TradeDataLoaderElementCollection : ConfigurationElementCollection

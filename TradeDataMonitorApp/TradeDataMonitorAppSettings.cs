@@ -22,7 +22,7 @@ namespace TradeDataMonitorApp
         /// <summary>
         /// Injected dependency filed for System.Configuration.ConfigurationManager
         /// </summary>
-        private static readonly ConfigurationManagerAdapter _configurationManager = new ConfigurationManagerAdapter();
+        private static readonly ConfigurationManagerWrapper _configurationManager = new ConfigurationManagerWrapper();
 
         /// <summary>
         /// Collection of ITradeDataLoader instances constucted at runtime from configuration file

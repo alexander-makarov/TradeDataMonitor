@@ -3,7 +3,8 @@ using System.Configuration;
 namespace TradeDataMonitorApp.Configuration
 {
     /// <summary>
-    /// An TradeDataLoaders configuration section class.
+    /// TradeDataLoaderElement configuration element class.
+    /// <remarks>http://www.codeproject.com/Articles/16466/Unraveling-the-Mysteries-of-NET-Configuration</remarks>
     /// </summary>
     public class TradeDataLoaderElement : ConfigurationElement
     {

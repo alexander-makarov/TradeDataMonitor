@@ -5,11 +5,29 @@ namespace TradeDataMonitoring
 {
     public class TradeData
     {
+        /// <summary>
+        /// Trading day
+        /// </summary>
         public DateTime Date { get; private set; }
+        /// <summary>
+        /// Open price for a day
+        /// </summary>
         public Decimal Open { get; private set; }
+        /// <summary>
+        /// High price for a day
+        /// </summary>
         public Decimal High { get; private set; }
+        /// <summary>
+        /// Low price for a day
+        /// </summary>
         public Decimal Low { get; private set; }
+        /// <summary>
+        /// Close price for a day
+        /// </summary>
         public Decimal Close { get; private set; }
+        /// <summary>
+        /// Tradig volume for a day
+        /// </summary>
         public int Volume { get; private set; }
 
         public TradeData(DateTime date, Decimal open, Decimal high, Decimal low, Decimal close, int volume)
@@ -22,6 +40,12 @@ namespace TradeDataMonitoring
             Volume = volume;
         }
 
+        /// <summary>
+        /// Parse inner fields from a string array of values
+        /// </summary>
+        /// <param name="valuesArray">expect array of 6 string values 
+        /// in a presented order: Date, Open, High, Low, Close, Volume</param>
+        /// <returns>parsed TradeData object</returns>
         public static TradeData Parse(string[] valuesArray)
         {
             if (valuesArray == null)

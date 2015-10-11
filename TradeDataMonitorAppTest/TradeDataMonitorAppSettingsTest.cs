@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using FakeItEasy;
 using FakeItEasy.ExtensionSyntax.Full;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,6 +16,20 @@ namespace TradeDataMonitorAppTest
     [TestClass]
     public class TradeDataMonitorAppSettingsTest
     {
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            // since TradeDataMonitorAppSettings is a static class,
+            // we want to avoid saving the class internal state between tests, for that
+            // we need to reset it before every test by calling a static constuctor of the class
+            // http://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
+            // another way redesign TradeDataMonitorAppSettings as singleton
+            Type staticType = typeof(TradeDataMonitorAppSettings);
+            ConstructorInfo ci = staticType.TypeInitializer;
+            object[] parameters = new object[0];
+            ci.Invoke(null, parameters);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void MonitoringDirectoryPath_NotLoadedSettings_InvalidOperationException()

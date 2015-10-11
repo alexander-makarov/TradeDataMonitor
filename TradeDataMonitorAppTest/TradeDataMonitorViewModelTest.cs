@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using FakeItEasy;
@@ -15,6 +16,26 @@ namespace TradeDataMonitorAppTest
     [TestClass]
     public class TradeDataMonitorViewModelTest
     {
+        private const string MonitoringStartText = "Start monitoring the directory for updates";
+
+        [TestMethod]
+        public void ConstructorDefaultValues_NoException()
+        {
+            // arrange
+            const string expectedDirectory = "X:\\some-expected-path\\dir1\\";
+            var mockedTradeDataMonitor = A.Fake<ITradeDataMonitor>();
+            mockedTradeDataMonitor.CallsTo(m => m.MonitoringDirectory).Returns(expectedDirectory);
+            // act
+            var viewModel = new TradeDataMonitorViewModel(mockedTradeDataMonitor, A.Fake<IDispatcher>()); // inject
+
+            // assert
+            Assert.AreEqual(MonitoringStartText, viewModel.MonitoringStartStopButtonContent);
+            Assert.AreEqual(true, viewModel.MonitoringStartStopButtonEnabled);
+            Assert.AreEqual(Colors.PaleGreen, viewModel.MonitoringStartStopButtonBackground.Color);
+            Assert.AreEqual(1.0, viewModel.MonitoringStartStopButtonBackground.Opacity);
+            Assert.AreEqual(expectedDirectory, viewModel.MonitoringDirectory);
+        }
+
         [TestMethod]
         public void MonitoringStartStop_MonitoringStopped_NoException()
         {
@@ -27,29 +48,10 @@ namespace TradeDataMonitorAppTest
             viewModel.MonitoringStartStop(null); // start monitoring (since it's stopped)
             
             // assert
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonEnabled, true);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonBackground.Color, Colors.PaleVioletRed);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonBackground.Opacity, 1.0);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonContent, "Stop monitoring the directory for updates");
-        }
-
-        [TestMethod]
-        public void MonitoringStartStop_MonitoringStartedNoCurrentFileReading_NoException()
-        {
-            // arrange
-            var mockedTradeDataMonitor = A.Fake<ITradeDataMonitor>(); // setup mocked model ITradeDataMonitor
-            mockedTradeDataMonitor.CallsTo(m => m.IsMonitoringStarted).Returns(true); // initially monitoring started
-            mockedTradeDataMonitor.CallsTo(m => m.StopMonitoringAsync()).Returns(Task.Run(()=>{})); // no background file reading, so stops immediately
-            var viewModel = new TradeDataMonitorViewModel(mockedTradeDataMonitor, A.Fake<IDispatcher>()); // inject
-
-            // act
-            viewModel.MonitoringStartStop(null); // stop monitoring (since it's started)
-
-            // assert
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonEnabled, true);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonBackground.Color, Colors.PaleGreen);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonBackground.Opacity, 1.0);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonContent, "Start monitoring the directory for updates");
+            Assert.AreEqual(true, viewModel.MonitoringStartStopButtonEnabled);
+            Assert.AreEqual(Colors.PaleVioletRed, viewModel.MonitoringStartStopButtonBackground.Color);
+            Assert.AreEqual(1.0, viewModel.MonitoringStartStopButtonBackground.Opacity);
+            Assert.AreEqual("Stop monitoring the directory for updates", viewModel.MonitoringStartStopButtonContent);
         }
 
         [TestMethod]
@@ -58,15 +60,18 @@ namespace TradeDataMonitorAppTest
             // arrange
             var mockedTradeDataMonitor = A.Fake<ITradeDataMonitor>(); // setup mocked model ITradeDataMonitor
             mockedTradeDataMonitor.CallsTo(m => m.IsMonitoringStarted).Returns(true); // initially monitoring started
-            mockedTradeDataMonitor.CallsTo(m => m.StopMonitoringAsync()).Returns(Task.Run(() => { while (true) ; })); // allegedly background file reading, so awaiting
+
+            Action longtimeReturnTask = () => { while (true); }; // simulating longtime monitoring stop like some large files were reading in background
+            mockedTradeDataMonitor.CallsTo(m => m.StopMonitoringAsync()).Returns(Task.Run(longtimeReturnTask)); // allegedly background file reading, so awaiting
+            
             var viewModel = new TradeDataMonitorViewModel(mockedTradeDataMonitor, A.Fake<IDispatcher>()); // inject
 
             // act
             viewModel.MonitoringStartStop(null); // await on stop monitoring (since it's started and there are file reading involved)
 
             // assert
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonEnabled, false);
-            Assert.AreEqual(viewModel.MonitoringStartStopButtonContent, "Will stop monitoring. Await on active file reading operations...");
+            Assert.AreEqual(false, viewModel.MonitoringStartStopButtonEnabled);
+            Assert.AreEqual("Will stop monitoring. Await on active file reading operations...", viewModel.MonitoringStartStopButtonContent);
         }
 
         [TestMethod]
@@ -103,10 +108,10 @@ namespace TradeDataMonitorAppTest
             mockedTradeDataMonitor.TradeDataUpdate += Raise.With(updatePackage2); // send second update to viewModel
 
             // assert
-            Assert.IsTrue(viewModel.TradeDataList.Count == expectedTradeDataList.Count);
+            Assert.AreEqual(expectedTradeDataList.Count, viewModel.TradeDataList.Count);
             for (int i = 0; i < expectedTradeDataList.Count; i++)
             {
-                Assert.AreEqual(viewModel.TradeDataList[i],  expectedTradeDataList[i]);
+                Assert.AreEqual(expectedTradeDataList[i], viewModel.TradeDataList[i]);
             }
         }
     }

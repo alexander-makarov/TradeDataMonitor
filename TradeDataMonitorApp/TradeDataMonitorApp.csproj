@@ -66,7 +66,7 @@
     <Compile Include="TradeDataMonitorAppModule.cs" />
     <Compile Include="TradeDataMonitorAppSettings.cs" />
     <Compile Include="AssemblyHelpers.cs" />
-    <Compile Include="ConfigurationManagerAdapter.cs" />
+    <Compile Include="ConfigurationManagerWrapper.cs" />
     <Compile Include="Configuration\TradeDataLoaderElement.cs" />
     <Compile Include="Configuration\TradeDataLoaderElementCollection.cs" />
     <Compile Include="Configuration\TradeDataLoadersSection.cs" />

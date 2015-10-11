@@ -3,7 +3,7 @@
 namespace TradeDataMonitorApp.Configuration
 {
     /// <summary>
-    /// An TradeDataLoaders configuration section class. 
+    /// TradeDataLoaders configuration section class. 
     /// <remarks>http://www.codeproject.com/Articles/16466/Unraveling-the-Mysteries-of-NET-Configuration</remarks>
     /// </summary>
     public class TradeDataLoadersSection : ConfigurationSection
