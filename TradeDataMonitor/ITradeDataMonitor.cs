@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace TradeDataMonitoring
 {
-    public interface ITradeDataMonitor : INotifyPropertyChanged
+    public interface ITradeDataMonitor
     {
         /// <summary>
         /// Event to notify about detected trade data updates
@@ -12,7 +13,7 @@ namespace TradeDataMonitoring
 
         void StartMonitoring();
 
-        void StopMonitoring();
+        Task StopMonitoringAsync();
 
         bool IsMonitoringStarted { get; }
 

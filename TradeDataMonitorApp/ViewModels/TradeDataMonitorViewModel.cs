@@ -90,14 +90,18 @@ namespace TradeDataMonitorApp.ViewModels
             MonitoringStartStopCommand = new RelayCommand(MonitoringStartStop);
         }
 
-        public void MonitoringStartStop(object o)
+        public async void MonitoringStartStop(object o)
         {
             if (_tradeDataMonitor.IsMonitoringStarted) // 
             {
-                _tradeDataMonitor.PropertyChanged += WaitTillIsMonitoringStartedIsFalse; 
+                //_tradeDataMonitor.PropertyChanged += WaitTillIsMonitoringStartedIsFalse; 
                 MonitoringStartStopButtonContent = "Will stop monitoring. Await on active file reading operations...";
                 MonitoringStartStopButtonEnabled = false;
-                _tradeDataMonitor.StopMonitoring();
+                await _tradeDataMonitor.StopMonitoringAsync();
+                MonitoringStartStopButtonContent = MonitoringStartText;
+                MonitoringStartStopButtonBackground = MonitoringStartBackground;
+                //_tradeDataMonitor.PropertyChanged -= WaitTillIsMonitoringStartedIsFalse;
+                MonitoringStartStopButtonEnabled = true;
             }
             else
             {
@@ -107,16 +111,16 @@ namespace TradeDataMonitorApp.ViewModels
             }
         }
 
-        private void WaitTillIsMonitoringStartedIsFalse(object o, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsMonitoringStarted" && _tradeDataMonitor.IsMonitoringStarted == false)
-            {
-                MonitoringStartStopButtonContent = MonitoringStartText;
-                MonitoringStartStopButtonBackground = MonitoringStartBackground;
-                _tradeDataMonitor.PropertyChanged -= WaitTillIsMonitoringStartedIsFalse;
-                MonitoringStartStopButtonEnabled = true;
-            }
-        }
+        //private void WaitTillIsMonitoringStartedIsFalse(object o, PropertyChangedEventArgs e)
+        //{
+        //    if (e.PropertyName == "IsMonitoringStarted" && _tradeDataMonitor.IsMonitoringStarted == false)
+        //    {
+        //        MonitoringStartStopButtonContent = MonitoringStartText;
+        //        MonitoringStartStopButtonBackground = MonitoringStartBackground;
+        //        _tradeDataMonitor.PropertyChanged -= WaitTillIsMonitoringStartedIsFalse;
+        //        MonitoringStartStopButtonEnabled = true;
+        //    }
+        //}
 
         #endregion
     }

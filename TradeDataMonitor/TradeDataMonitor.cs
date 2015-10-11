@@ -15,83 +15,49 @@ namespace TradeDataMonitoring
     /// one might find useful to look at FileSystemWatcher class:
     /// https://msdn.microsoft.com/en-us/library/system.io.filesystemwatcher(v=vs.110).aspx </remarks>
     /// </summary>
-    public class TradeDataMonitor : ITradeDataMonitor, INotifyPropertyChanged
+    public class TradeDataMonitor : ITradeDataMonitor
     {
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
+        private readonly object _syncObj = new object();
         private readonly IFileSystemManager _fileSystemManager;
         private readonly ITradeDataLoader _tradeDataLoader;
-        private DateTime _lastCheckUpdates = DateTime.MinValue;
         private readonly ITimer _timer;
-        private readonly int _timerPeriodSeconds = 5;
-        private readonly string _monitoringDirectory;
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool _stopMonitoringRequestToken = false;
-        private bool _isMonitoringStarted;
-        private readonly object _syncObj = new object();
-
-        public string MonitoringDirectory { get { return _monitoringDirectory; } }
-
-
-        public bool IsMonitoringStarted
-        {
-            get { return _isMonitoringStarted; }
-            private set { _isMonitoringStarted = value; OnPropertyChanged();}
-        }
+        private DateTime _lastCheckUpdates = DateTime.MinValue;
+        public string MonitoringDirectory { get; private set; }
+        public bool IsMonitoringStarted { get; private set; }
+        public int TimerPeriodSeconds { get; private set; }
 
         public TradeDataMonitor(IFileSystemManager fileSystemManager, ITimer timer, ITradeDataLoader tradeDataLoader,  int timerPeriodSeconds, string monitoringDirectory)
         {
             _fileSystemManager = fileSystemManager;
             _tradeDataLoader = tradeDataLoader;
-            _timerPeriodSeconds = timerPeriodSeconds;
             _timer = timer;
             _timer.Init(OnTimerTick, null, Timeout.Infinite, Timeout.Infinite);
-            _monitoringDirectory = monitoringDirectory;
+            TimerPeriodSeconds = timerPeriodSeconds;
+            MonitoringDirectory = monitoringDirectory;
             IsMonitoringStarted = false;
         }
 
         public void StartMonitoring()
         {
-            if (!IsMonitoringStarted)
+            lock (_syncObj)
             {
-                IsMonitoringStarted = true;
-                _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
+                if (!IsMonitoringStarted)
+                {
+                    IsMonitoringStarted = true;
+                    _timer.Change(TimerPeriodSeconds*1000, Timeout.Infinite);
+                }
             }
         }
         
-        public void StopMonitoring()
+        public Task StopMonitoringAsync()
         {
-            bool acquired = false;
-            try
+            return Task.Run(() =>
             {
-                acquired = Monitor.TryEnter(_syncObj);
-                if (acquired)
+                lock (_syncObj)
                 {
                     IsMonitoringStarted = false;
                 }
-                else
-                {
-                    _stopMonitoringRequestToken = true;
-                }
-            }
-            finally
-            {
-                if (acquired)
-                {
-                    Monitor.Exit(_syncObj);
-                }
-            }
+            });
         }
 
         private void OnTimerTick(object state)
@@ -103,15 +69,7 @@ namespace TradeDataMonitoring
 
                 CheckUpdates();
 
-                if (!_stopMonitoringRequestToken)
-                {
-                    _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
-                }
-                else
-                {
-                    IsMonitoringStarted = false;
-                    _stopMonitoringRequestToken = false;
-                }
+                _timer.Change(TimerPeriodSeconds * 1000, Timeout.Infinite);
             }
         }
 
@@ -137,7 +95,7 @@ namespace TradeDataMonitoring
         private void CheckUpdates()
         {
             var now = DateTime.UtcNow; // save the 'now' time
-            var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory); // check directory for new files
+            var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, MonitoringDirectory); // check directory for new files
             _lastCheckUpdates = now; // update last checked time
             
             // go for parallel file processing:
