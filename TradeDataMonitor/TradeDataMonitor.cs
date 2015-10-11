@@ -33,6 +33,12 @@ namespace TradeDataMonitoring
         private readonly ITimer _timer;
         private readonly int _timerPeriodSeconds = 5;
         private readonly string _monitoringDirectory;
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool _stopMonitoringRequestToken = false;
+        private bool _isMonitoringStarted;
+        private readonly object _syncObj = new object();
 
         public string MonitoringDirectory { get { return _monitoringDirectory; } }
 
@@ -66,81 +72,7 @@ namespace TradeDataMonitoring
                 _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
             }
         }
-
-        private void OnTimerTick(object state)
-        {
-            lock (_syncObj)
-            {
-                if (!IsMonitoringStarted)
-                    return;
-
-                CheckUpdates();
-
-                if (!_stopMonitoringRequestToken)
-                {
-                    _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
-                }
-                else
-                {
-                    IsMonitoringStarted = false;
-                    _stopMonitoringRequestToken = false;
-                }
-            }
-        }
-
-        public event Action<TradeDataPackage> TradeDataUpdate;
-
-        protected virtual void OnTradeDataUpdate(TradeDataPackage obj)
-        {
-            Action<TradeDataPackage> handler = TradeDataUpdate;
-            if (handler != null) handler(obj);
-        }
-
-        /// <summary>
-        /// 
-        /// <remarks>
-        /// For now, we track new files by creation time, and don't delete any of them,
-        /// another option might be to delete files once they have been processed</remarks>
-        /// </summary>
-        private void CheckUpdates()
-        {
-            ////test
-            //const string correctCsvString = "2013-5-20,30.16,30.39,30.02,30.17,1478200";
-            //var corectValues = correctCsvString.Split(',');
-            //var data1 = TradeData.Parse(corectValues);
-            //var p = new TradeDataPackage();
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    p.Package.Add(data1);
-            //    data1 = new TradeData(data1.Date.AddDays(1), data1.Open, data1.High, data1.Low, data1.Close,
-            //        data1.Volume);
-
-            //}
-            //OnTradeDataUpdate(p);
-            //return;
-            ////test
-
-            var now = DateTime.UtcNow;
-            var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory);
-            _lastCheckUpdates = now;
-            
-            // go for parallel file processing:
-            Parallel.ForEach(files, 
-                (file) =>
-                {
-                    // for any new file check if we could load data from it
-                    if (_tradeDataLoader.CouldLoad(file))
-                    {
-                        var data = _tradeDataLoader.LoadTradeData(file); // load data
-                        OnTradeDataUpdate(data); // notify about update
-                    }
-                });
-        }
-
-        private bool _stopMonitoringRequestToken = false;
-        private bool _isMonitoringStarted;
-        private readonly object _syncObj = new object();
-
+        
         public void StopMonitoring()
         {
             bool acquired = false;
@@ -164,5 +96,65 @@ namespace TradeDataMonitoring
                 }
             }
         }
+
+        private void OnTimerTick(object state)
+        {
+            lock (_syncObj)
+            {
+                if (!IsMonitoringStarted)
+                    return;
+
+                CheckUpdates();
+
+                if (!_stopMonitoringRequestToken)
+                {
+                    _timer.Change(_timerPeriodSeconds*1000, Timeout.Infinite);
+                }
+                else
+                {
+                    IsMonitoringStarted = false;
+                    _stopMonitoringRequestToken = false;
+                }
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// Event to notify about trade data updates
+        /// </summary>
+        public event Action<TradeDataPackage> TradeDataUpdate;
+        protected virtual void OnTradeDataUpdate(TradeDataPackage obj)
+        {
+            Action<TradeDataPackage> handler = TradeDataUpdate;
+            if (handler != null) handler(obj);
+        }
+
+        /// <summary>
+        /// Check for data updates (new files) in monitoring directory
+        /// <remarks>
+        /// For now, we track new files by creation time, and don't delete any of them,
+        /// another option might be to delete files once they have been processed</remarks>
+        /// </summary>
+        private void CheckUpdates()
+        {
+            var now = DateTime.UtcNow; // save the 'now' time
+            var files = _fileSystemManager.GetNewFilesFromDirectory(_lastCheckUpdates, _monitoringDirectory); // check directory for new files
+            _lastCheckUpdates = now; // update last checked time
+            
+            // go for parallel file processing:
+            Parallel.ForEach(files, 
+                (file) =>
+                {
+                    // for any new file check if we could load data from it
+                    if (_tradeDataLoader.CouldLoad(file))
+                    {
+                        var data = _tradeDataLoader.LoadTradeData(file); // load data
+                        OnTradeDataUpdate(data); // notify about update
+                    }
+                });
+        }
+
     }
 }

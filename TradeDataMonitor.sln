@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitor", "TradeDataMonitor\TradeDataMonitor.csproj", "{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitoring", "TradeDataMonitor\TradeDataMonitoring.csproj", "{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitorTest", "TradeDataMonitorTest\TradeDataMonitorTest.csproj", "{2177A527-039B-464A-BD89-F0D758CE1B20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitorApp", "TradeDataMonitorApp\TradeDataMonitorApp.csproj", "{934D8FB4-93E8-4176-8BAB-9CFA3EF630B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlFileTradeData", "XmlTradeDataLoader\XmlFileTradeData.csproj", "{9F8C3DF8-12F2-4F1A-96E3-794826ECD179}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C68B1FE1-1581-4111-8A7C-04010CCA61E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlFileTradeDataTest", "XmlFileTradeDataLoaderTest\XmlFileTradeDataTest.csproj", "{FB8C27DE-E5E6-4663-A194-3B28E57E58B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "TestHelpers\TestHelpers.csproj", "{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +39,21 @@ Global
 		{9F8C3DF8-12F2-4F1A-96E3-794826ECD179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F8C3DF8-12F2-4F1A-96E3-794826ECD179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F8C3DF8-12F2-4F1A-96E3-794826ECD179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8C27DE-E5E6-4663-A194-3B28E57E58B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8C27DE-E5E6-4663-A194-3B28E57E58B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8C27DE-E5E6-4663-A194-3B28E57E58B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8C27DE-E5E6-4663-A194-3B28E57E58B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2177A527-039B-464A-BD89-F0D758CE1B20} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
+		{FB8C27DE-E5E6-4663-A194-3B28E57E58B4} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
+		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
 	EndGlobalSection
 EndGlobal

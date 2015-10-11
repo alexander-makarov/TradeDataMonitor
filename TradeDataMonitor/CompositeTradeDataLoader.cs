@@ -6,9 +6,9 @@ namespace TradeDataMonitoring
 {
     public class CompositeTradeDataLoader : ITradeDataLoader
     {
-        private readonly List<ITradeDataLoader> _loaders;
+        private readonly IEnumerable<ITradeDataLoader> _loaders;
 
-        public CompositeTradeDataLoader(List<ITradeDataLoader> loaders)
+        public CompositeTradeDataLoader(IEnumerable<ITradeDataLoader> loaders)
         {
             _loaders = loaders;
         }

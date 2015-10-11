@@ -8,6 +8,207 @@ namespace TradeDataMonitorTest
     public class TradeDataTest
     {
         [TestMethod]
+        public void Constuctor_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data = new TradeData(date, open, high, low, close, volume);
+
+            // assert
+            Assert.AreEqual(data.Date, date);
+            Assert.AreEqual(data.Open, open);
+            Assert.AreEqual(data.High, high);
+            Assert.AreEqual(data.Low, low);
+            Assert.AreEqual(data.Close, close);
+            Assert.AreEqual(data.Volume, volume);
+        }
+
+        #region Equals method
+        [TestMethod]
+        public void Equals_SameValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date, open, high, low, close, volume);
+
+            // assert
+            Assert.IsTrue(data1.Equals(data2));
+            Assert.IsTrue(data2.Equals(data1));
+            Assert.IsTrue(data1 == data2);
+            Assert.AreEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_NullValue_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            TradeData data2 = null;
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_DiffVolumeValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date, open, high, low, close, volume + 1);
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data2.Equals(data1));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_DiffCloseValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date, open, high, low, close + 1, volume);
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data2.Equals(data1));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_DiffLowValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date, open, high, low + 1, close, volume);
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data2.Equals(data1));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_DiffHighValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date, open, high + 1, low, close, volume);
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data2.Equals(data1));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_DiffOpenValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date, open + 1, high, low, close, volume);
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data2.Equals(data1));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+
+        [TestMethod]
+        public void Equals_DiffDateValues_NoException()
+        {
+            // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
+
+            // act
+            var data1 = new TradeData(date, open, high, low, close, volume);
+            var data2 = new TradeData(date.AddDays(1), open, high, low, close + 1, volume);
+
+            // assert
+            Assert.IsFalse(data1.Equals(data2));
+            Assert.IsFalse(data2.Equals(data1));
+            Assert.IsFalse(data1 == data2);
+            Assert.AreNotEqual(data1, data2);
+        }
+        #endregion
+
+        #region Parse method (static)
+        [TestMethod]
         public void Parse_AllCorrectValues_NoException()
         {
             // arrange
@@ -144,5 +345,6 @@ namespace TradeDataMonitorTest
             // act
             var data = TradeData.Parse(incorrectValues);
         }
+        #endregion
     }
 }

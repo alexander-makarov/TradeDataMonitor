@@ -46,5 +46,44 @@ namespace TradeDataMonitoring
 
             return data;
         }
+
+        #region Equals, ==, GetHashCode
+        protected bool Equals(TradeData other)
+        {
+            return Volume == other.Volume && Close == other.Close && Low == other.Low && High == other.High && Open == other.Open && Date.Equals(other.Date);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TradeData)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = Volume;
+                hashCode = (hashCode * 397) ^ Close.GetHashCode();
+                hashCode = (hashCode * 397) ^ Low.GetHashCode();
+                hashCode = (hashCode * 397) ^ High.GetHashCode();
+                hashCode = (hashCode * 397) ^ Open.GetHashCode();
+                hashCode = (hashCode * 397) ^ Date.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(TradeData left, TradeData right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(TradeData left, TradeData right)
+        {
+            return !Equals(left, right);
+        }
+        #endregion
     }
 }

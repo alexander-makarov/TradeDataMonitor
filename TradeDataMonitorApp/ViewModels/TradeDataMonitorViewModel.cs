@@ -27,7 +27,7 @@ namespace TradeDataMonitorApp.ViewModels
 
         private void TradeDataMonitorOnTradeDataUpdate(TradeDataPackage tradeDataPackage)
         {
-            Application.Current.Dispatcher.Invoke(() => tradeDataPackage.Package.ForEach(data => _tradeDataList.Add(data)));
+            Application.Current.Dispatcher.Invoke(() => tradeDataPackage.TradeDataList.ForEach(data => _tradeDataList.Add(data)));
         }
 
         /// <summary>

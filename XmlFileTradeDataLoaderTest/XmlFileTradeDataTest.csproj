@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2177A527-039B-464A-BD89-F0D758CE1B20}</ProjectGuid>
+    <ProjectGuid>{FB8C27DE-E5E6-4663-A194-3B28E57E58B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TradeDataMonitorTest</RootNamespace>
-    <AssemblyName>TradeDataMonitorTest</AssemblyName>
+    <RootNamespace>XmlFileTradeDataTest</RootNamespace>
+    <AssemblyName>XmlFileTradeDataTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FakeItEasy">
-      <HintPath>..\packages\FakeItEasy.1.25.3\lib\net40\FakeItEasy.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -53,15 +50,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TxtFileTradeDataLoaderTest.cs" />
-    <Compile Include="TradeDataMonitorTest.cs" />
+    <Compile Include="XmlFileTradeDataLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CsvFileTradeDataLoaderTest.cs" />
-    <Compile Include="TradeDataPackage.cs" />
-    <Compile Include="TradeDataTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestHelpers\TestHelpers.csproj">
@@ -71,6 +61,10 @@
     <ProjectReference Include="..\TradeDataMonitor\TradeDataMonitoring.csproj">
       <Project>{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}</Project>
       <Name>TradeDataMonitoring</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XmlTradeDataLoader\XmlFileTradeData.csproj">
+      <Project>{9F8C3DF8-12F2-4F1A-96E3-794826ECD179}</Project>
+      <Name>XmlFileTradeData</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

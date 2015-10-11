@@ -60,6 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="AssemblyHelpers.cs" />
     <Compile Include="Configuration\TradeDataLoaderElement.cs" />
     <Compile Include="Configuration\TradeDataLoaderElementCollection.cs" />
     <Compile Include="Configuration\TradeDataLoadersSection.cs" />
@@ -112,9 +114,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TradeDataMonitor\TradeDataMonitor.csproj">
+    <ProjectReference Include="..\TradeDataMonitor\TradeDataMonitoring.csproj">
       <Project>{C8F03788-44DB-4C2F-BCFA-8DBCB65EFD8D}</Project>
-      <Name>TradeDataMonitor</Name>
+      <Name>TradeDataMonitoring</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
