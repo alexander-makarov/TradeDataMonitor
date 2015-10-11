@@ -97,10 +97,10 @@ namespace TradeDataMonitorAppTest
             var tryReadLoaders = TradeDataMonitorAppSettings.TradeDataLoaders;
 
             // assert
-            Assert.AreEqual(tryReadPeriod, expectedPeriod);
-            Assert.AreEqual(tryReadDirectory, expectedDirectory);
-            Assert.IsTrue(tryReadLoaders.Count == expectedLoaders.Count
-                && tryReadLoaders.First().GetType() == expectedLoaders.First().GetType());
+            Assert.AreEqual(expectedPeriod, tryReadPeriod);
+            Assert.AreEqual(expectedDirectory, tryReadDirectory);
+            Assert.IsTrue(expectedLoaders.Count == tryReadLoaders.Count
+                       && expectedLoaders.First().GetType() == tryReadLoaders.First().GetType());
         }
 
         [TestMethod]

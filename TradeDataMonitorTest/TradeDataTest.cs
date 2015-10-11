@@ -22,12 +22,12 @@ namespace TradeDataMonitorTest
             var data = new TradeData(date, open, high, low, close, volume);
 
             // assert
-            Assert.AreEqual(data.Date, date);
-            Assert.AreEqual(data.Open, open);
-            Assert.AreEqual(data.High, high);
-            Assert.AreEqual(data.Low, low);
-            Assert.AreEqual(data.Close, close);
-            Assert.AreEqual(data.Volume, volume);
+            Assert.AreEqual(date, data.Date);
+            Assert.AreEqual(open, data.Open);
+            Assert.AreEqual(high, data.High);
+            Assert.AreEqual(low, data.Low);
+            Assert.AreEqual(close, data.Close);
+            Assert.AreEqual(volume, data.Volume);
         }
 
         #region Equals method
@@ -212,19 +212,25 @@ namespace TradeDataMonitorTest
         public void Parse_AllCorrectValues_NoException()
         {
             // arrange
+            var date = new DateTime(2013, 5, 20);
+            var open = new decimal(30.16);
+            var high = new decimal(30.39);
+            var low = new decimal(30.02);
+            var close = new decimal(30.17);
+            var volume = 1478200;
             const string correctCsvString = "2013-5-20,30.16,30.39,30.02,30.17,1478200";
             var corectValues = correctCsvString.Split(',');
 
             // act
             var data = TradeData.Parse(corectValues);
-            
+
             // assert
-            Assert.AreEqual(data.Date, new DateTime(2013, 5, 20));
-            Assert.AreEqual(data.Open, new decimal(30.16));
-            Assert.AreEqual(data.High, new decimal(30.39));
-            Assert.AreEqual(data.Low, new decimal(30.02));
-            Assert.AreEqual(data.Close, new decimal(30.17));
-            Assert.AreEqual(data.Volume, 1478200);
+            Assert.AreEqual(date, data.Date);
+            Assert.AreEqual(open, data.Open);
+            Assert.AreEqual(high, data.High);
+            Assert.AreEqual(low, data.Low);
+            Assert.AreEqual(close, data.Close);
+            Assert.AreEqual(volume, data.Volume);
         }
 
         [TestMethod]

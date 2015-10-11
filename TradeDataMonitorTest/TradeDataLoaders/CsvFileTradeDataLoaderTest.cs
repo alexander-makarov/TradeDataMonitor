@@ -96,7 +96,7 @@ namespace TradeDataMonitorTest.TradeDataLoaders
             {
                 var actual = package.TradeDataList[i];
                 var expected = expectedPackage.TradeDataList[i];
-                Assert.AreEqual(actual, expected, "One of the values has been read incorrect");
+                Assert.AreEqual(expected, actual, "One of the values has been read incorrect");
             }
         }
 
@@ -155,7 +155,7 @@ namespace TradeDataMonitorTest.TradeDataLoaders
             {
                 var actual = package.TradeDataList[i];
                 var expected = expectedPackage.TradeDataList[i];
-                Assert.AreEqual(actual, expected, "One of the values has been read incorrect");
+                Assert.AreEqual(expected, actual, "One of the values has been read incorrect");
             }
         }
     }
