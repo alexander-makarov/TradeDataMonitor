@@ -8,8 +8,9 @@ namespace TradeDataMonitorApp
         public override void Load()
         {
             Bind<IFileSystemManager>().To<FileSystemManager>();
-            Bind<ITimer>().To<TimerAdaper>();
+            Bind<ITimer>().To<TimerWrapper>();
             Bind<ITradeDataMonitor>().To<TradeDataMonitor>();
+            Bind<IDispatcher>().To<DispatcherWrapper>();
         }
     }
 }

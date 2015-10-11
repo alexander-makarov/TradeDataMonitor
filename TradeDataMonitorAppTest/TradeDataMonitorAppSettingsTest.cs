@@ -221,5 +221,79 @@ namespace TradeDataMonitorAppTest
             // act
             TradeDataMonitorAppSettings.Load(mockedConfigManager); // call Load with all the mocked stuff
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ConfigurationErrorsException))]
+        public void Load_TradeDataLoadersSectionSpecifiedButIncorrectAssembly_ConfigurationErrorsException()
+        {
+            // arrange
+            // all expected values that we gonna mock into further
+            const int expectedPeriod = 5;
+            string expectedDirectory = Environment.CurrentDirectory;
+
+            var mockedConfigManager = A.Fake<IConfigurationManager>(); // mock System.Configuration.Manager
+
+            #region mock fake values for AppSettings elements of app.config of System.Configuration.Manager
+            var fakeAppSettings = new NameValueCollection
+            {
+                { "UpdatesMonitoringPeriodSeconds", expectedPeriod.ToString() },
+                { "MonitoringDirectoryPath", expectedDirectory }
+            };
+            mockedConfigManager.CallsTo(cm => cm.AppSettings).Returns(fakeAppSettings);
+            #endregion
+
+            #region mock TradeDataLoadersSection of app.config of System.Configuration.Manager
+            var appConfigSection = A.Fake<TradeDataLoadersSection>();
+            var fakeTradeDataLoaderElementCollection = new TradeDataLoaderElementCollection();
+            var tradeDataLoaderElement = new TradeDataLoaderElement
+            {
+                Assembly = "NOT-EXISTENT-ASSEMBLY###TradeDataMonitoring.dll", // INCORRECT VALUE
+                Class = "TradeDataMonitoring.TradeDataLoaders.CsvFileTradeDataLoader"
+            };
+            fakeTradeDataLoaderElementCollection.Add(tradeDataLoaderElement);
+            appConfigSection.CallsTo(section => section.TradeDataLoaders).Returns(fakeTradeDataLoaderElementCollection);
+            mockedConfigManager.CallsTo(cm => cm.GetSection("TradeDataLoadersSection")).Returns(appConfigSection);
+            #endregion
+
+            // act
+            TradeDataMonitorAppSettings.Load(mockedConfigManager); // call Load with all the mocked stuff
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ConfigurationErrorsException))]
+        public void Load_TradeDataLoadersSectionSpecifiedButIncorrectClassName_ConfigurationErrorsException()
+        {
+            // arrange
+            // all expected values that we gonna mock into further
+            const int expectedPeriod = 5;
+            string expectedDirectory = Environment.CurrentDirectory;
+
+            var mockedConfigManager = A.Fake<IConfigurationManager>(); // mock System.Configuration.Manager
+
+            #region mock fake values for AppSettings elements of app.config of System.Configuration.Manager
+            var fakeAppSettings = new NameValueCollection
+            {
+                { "UpdatesMonitoringPeriodSeconds", expectedPeriod.ToString() },
+                { "MonitoringDirectoryPath", expectedDirectory }
+            };
+            mockedConfigManager.CallsTo(cm => cm.AppSettings).Returns(fakeAppSettings);
+            #endregion
+
+            #region mock TradeDataLoadersSection of app.config of System.Configuration.Manager
+            var appConfigSection = A.Fake<TradeDataLoadersSection>();
+            var fakeTradeDataLoaderElementCollection = new TradeDataLoaderElementCollection();
+            var tradeDataLoaderElement = new TradeDataLoaderElement
+            {
+                Assembly = "TradeDataMonitoring.dll",
+                Class = "NOT-EXISTENT-TYPENAME###TradeDataMonitoring.TradeDataLoaders.CsvFileTradeDataLoader" // INCORRECT VALUE
+            };
+            fakeTradeDataLoaderElementCollection.Add(tradeDataLoaderElement);
+            appConfigSection.CallsTo(section => section.TradeDataLoaders).Returns(fakeTradeDataLoaderElementCollection);
+            mockedConfigManager.CallsTo(cm => cm.GetSection("TradeDataLoadersSection")).Returns(appConfigSection);
+            #endregion
+
+            // act
+            TradeDataMonitorAppSettings.Load(mockedConfigManager); // call Load with all the mocked stuff
+        }
     }
 }

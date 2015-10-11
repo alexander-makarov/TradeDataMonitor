@@ -7,9 +7,10 @@ namespace TradeDataMonitoring
     public interface ITradeDataMonitor
     {
         /// <summary>
-        /// Event to notify about detected trade data updates
+        /// Event to notify about detected trade data updates 
+        /// <remarks>Use of EventHandler just for unit-testing (to allow FakeItEasy raise events from ITradeDataMonitor)</remarks>
         /// </summary>
-        event Action<TradeDataPackage> TradeDataUpdate;
+        event EventHandler<TradeDataPackage> TradeDataUpdate;
 
         void StartMonitoring();
 

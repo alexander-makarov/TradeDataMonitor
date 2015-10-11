@@ -47,7 +47,7 @@
     <Compile Include="ITimer.cs" />
     <Compile Include="TradeDataLoaders\FileTypeBasedTradeDataLoader.cs" />
     <Compile Include="TradeDataLoaders\ITradeDataLoader.cs" />
-    <Compile Include="TimerAdaper.cs" />
+    <Compile Include="TimerWrapper.cs" />
     <Compile Include="TradeData.cs" />
     <Compile Include="TradeDataMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

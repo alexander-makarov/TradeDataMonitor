@@ -79,11 +79,11 @@ namespace TradeDataMonitoring
         /// <summary>
         /// Event to notify about detected trade data updates
         /// </summary>
-        public event Action<TradeDataPackage> TradeDataUpdate;
+        public event EventHandler<TradeDataPackage> TradeDataUpdate;
         protected virtual void OnTradeDataUpdate(TradeDataPackage obj)
         {
-            Action<TradeDataPackage> handler = TradeDataUpdate;
-            if (handler != null) handler(obj);
+            EventHandler<TradeDataPackage> handler = TradeDataUpdate;
+            if (handler != null) handler(this, obj);
         }
 
         /// <summary>

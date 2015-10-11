@@ -61,6 +61,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DispatcherWrapper.cs" />
+    <Compile Include="IDispatcher.cs" />
     <Compile Include="TradeDataMonitorAppModule.cs" />
     <Compile Include="TradeDataMonitorAppSettings.cs" />
     <Compile Include="AssemblyHelpers.cs" />

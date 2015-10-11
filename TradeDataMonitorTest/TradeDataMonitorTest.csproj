@@ -58,7 +58,7 @@
     <Compile Include="TradeDataMonitorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TradeDataLoaders\CsvFileTradeDataLoaderTest.cs" />
-    <Compile Include="TradeDataPackage.cs" />
+    <Compile Include="TradeDataPackageTest.cs" />
     <Compile Include="TradeDataTest.cs" />
   </ItemGroup>
   <ItemGroup>

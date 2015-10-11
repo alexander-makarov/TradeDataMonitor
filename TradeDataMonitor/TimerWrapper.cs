@@ -3,7 +3,10 @@ using System.Threading;
 
 namespace TradeDataMonitoring
 {
-    public class TimerAdaper : ITimer
+    /// <summary>
+    /// Wrapper around System.Threading.Timer
+    /// </summary>
+    public class TimerWrapper : ITimer
     {
         private Timer _timer;
 

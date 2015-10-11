@@ -39,7 +39,9 @@ namespace TradeDataMonitorApp
                      new ConstructorArgument("monitoringDirectory", TradeDataMonitorAppSettings.MonitoringDirectoryPath),
                      new ConstructorArgument("tradeDataLoader", compositeLoader));
 
-                var viewModel = new TradeDataMonitorViewModel(model); // initialize ViewModel with TradeDataMonitor
+                // initialize ViewModel with TradeDataMonitor
+                var viewModel = kernel.Get<TradeDataMonitorViewModel>(new ConstructorArgument("tradeDataMonitor", model));
+                    
                 var mw = new MainWindow(viewModel);
                 mw.Show();
             }
