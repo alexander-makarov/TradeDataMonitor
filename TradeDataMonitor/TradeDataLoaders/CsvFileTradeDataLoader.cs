@@ -1,38 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace TradeDataMonitoring
+namespace TradeDataMonitoring.TradeDataLoaders
 {
-
     /// <summary>
-    /// TradeDataLoader for .txt files
+    /// TradeDataLoader for .csv files
     /// </summary>
-    public class TxtFileTradeDataLoader : ITradeDataLoader
+    public class CsvFileTradeDataLoader : FileBasedTradeDataLoader
     {
-        /// <summary>
-        /// Checking that file is supported and trade data could be loaded
-        /// </summary>
-        /// <param name="file">file to check</param>
-        /// <returns>true if able to load data</returns>
-        public bool CouldLoad(FileInfo file)
-        {
-            return file.Extension == ".txt"; // checking the appropriate extension
-        }
-
-        /// <summary>
-        /// Loading trade data from  .txt file
-        /// </summary>
-        /// <param name="file">.txt file to read</param>
-        /// <returns>single package of trade data that has been loaded</returns>
-        public TradeDataPackage LoadTradeData(FileInfo file)
-        {
-            using (FileStream fs = File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (var bs = new BufferedStream(fs))
-            {
-                return LoadTradeData(bs);
-            }
-        }
-
         /// <summary>
         /// Reading a stream by lines
         /// trying to parse TradeData
@@ -40,18 +15,17 @@ namespace TradeDataMonitoring
         /// </summary>
         /// <param name="stream">Stream to read</param>
         /// <returns>Single package of trade data that has been loaded</returns>
-        public TradeDataPackage LoadTradeData(Stream stream)
+        public override TradeDataPackage LoadTradeData(Stream stream)
         {
             var dataList = new List<TradeData>();
             using (var sr = new StreamReader(stream))
             {
                 string line;
-                sr.ReadLine(); // skip the first line with columns names
                 while ((line = sr.ReadLine()) != null)
                 {
                     try
                     {
-                        var arr = line.Split(';'); // split by value separator symbol
+                        var arr = line.Split(','); // split by value separator symbol
                         var data = TradeData.Parse(arr); // parse values into TradeData object
                         dataList.Add(data);
                     }
@@ -65,6 +39,14 @@ namespace TradeDataMonitoring
             }
 
             return new TradeDataPackage(dataList);
+        }
+
+        /// <summary>
+        /// Supported file type extension (e.g. ".xml")
+        /// </summary>
+        protected override string SupportedFileTypeExtension
+        {
+            get { return ".csv"; }
         }
     }
 }

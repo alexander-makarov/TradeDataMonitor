@@ -6,6 +6,6 @@ namespace TradeDataMonitoring
 {
     public interface IFileSystemManager
     {
-        IEnumerable<FileInfo> GetNewFilesFromDirectory(DateTime createdLater, string directoryPath);
+        IEnumerable<FileInfo> GetNewFilesFromDirectory(DateTime createdLaterUtc, string directoryPath);
     }
 }

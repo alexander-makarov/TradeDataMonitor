@@ -22,11 +22,11 @@ namespace XmlFileTradeDataTest
         public void CouldLoad_XmlFile_NoException()
         {
             // arrange
-            var csvFilePath = "X:\\folder1\\folder2\\tradedata.xml";
-            var csvFile = new FileInfo(csvFilePath);
+            var xmlFilePath = "X:\\folder1\\folder2\\tradedata.xml";
+            var xmlFile = new FileInfo(xmlFilePath);
 
             // act
-            var couldLoad = _loader.CouldLoad(csvFile);
+            var couldLoad = _loader.CouldLoad(xmlFile);
 
             // assert
             Assert.IsTrue(couldLoad, "Should be able to load .xml files");
@@ -36,7 +36,7 @@ namespace XmlFileTradeDataTest
         public void CouldLoad_NotSupportedFile_NoException()
         {
             // arrange
-            var csvFilePath = "X:\\folder1\\folder2\\tradedata.txt";
+            var csvFilePath = "X:\\folder1\\folder2\\tradedata.csv";
             var csvFile = new FileInfo(csvFilePath);
 
             // act

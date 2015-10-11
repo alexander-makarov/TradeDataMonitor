@@ -39,18 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompositeTradeDataLoader.cs" />
-    <Compile Include="CsvFileTradeDataLoader.cs" />
+    <Compile Include="TradeDataLoaders\CompositeTradeDataLoader.cs" />
+    <Compile Include="TradeDataLoaders\CsvFileTradeDataLoader.cs" />
     <Compile Include="FileSystemManager.cs" />
     <Compile Include="IFileSystemManager.cs" />
     <Compile Include="ITimer.cs" />
-    <Compile Include="ITradeDataLoader.cs" />
+    <Compile Include="TradeDataLoaders\FileTypeBasedTradeDataLoader.cs" />
+    <Compile Include="TradeDataLoaders\ITradeDataLoader.cs" />
     <Compile Include="TimerAdaper.cs" />
     <Compile Include="TradeData.cs" />
     <Compile Include="TradeDataMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TradeDataPackage.cs" />
-    <Compile Include="TxtFileTradeDataLoader.cs" />
+    <Compile Include="TradeDataLoaders\TxtFileTradeDataLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

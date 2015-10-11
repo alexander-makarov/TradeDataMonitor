@@ -53,10 +53,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TxtFileTradeDataLoaderTest.cs" />
+    <Compile Include="TradeDataLoaders\CompositeTradeDataLoaderTest.cs" />
+    <Compile Include="TradeDataLoaders\TxtFileTradeDataLoaderTest.cs" />
     <Compile Include="TradeDataMonitorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CsvFileTradeDataLoaderTest.cs" />
+    <Compile Include="TradeDataLoaders\CsvFileTradeDataLoaderTest.cs" />
     <Compile Include="TradeDataPackage.cs" />
     <Compile Include="TradeDataTest.cs" />
   </ItemGroup>

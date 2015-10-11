@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using TradeDataMonitorApp.Configuration;
-using TradeDataMonitoring;
+using TradeDataMonitoring.TradeDataLoaders;
 
 namespace TradeDataMonitorApp
 {

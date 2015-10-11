@@ -1,40 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Xml;
 using TradeDataMonitoring;
+using TradeDataMonitoring.TradeDataLoaders;
 
 namespace XmlFileTradeData
 {
     /// <summary>
     /// TradeDataLoader for .xml files
     /// </summary>
-    public class XmlFileTradeDataLoader : ITradeDataLoader
+    public class XmlFileTradeDataLoader : FileBasedTradeDataLoader
     {
-        /// <summary>
-        /// Checking that file is supported and trade data could be loaded
-        /// </summary>
-        /// <param name="file">file to check</param>
-        /// <returns>true if able to load data</returns>
-        public bool CouldLoad(FileInfo file)
-        {
-            return file.Extension == ".xml"; // checking the appropriate extension
-        }
-
-        /// <summary>
-        /// Loading trade data from  .xml file
-        /// </summary>
-        /// <param name="file">.xml file to read</param>
-        /// <returns>single package of trade data that has been loaded</returns>
-        public TradeDataPackage LoadTradeData(FileInfo file)
-        {
-            using (FileStream fs = File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (var bs = new BufferedStream(fs))
-            {
-                return LoadTradeData(bs);
-            }
-        }
-
         /// <summary>
         /// Reading a stream by lines
         /// trying to parse TradeData
@@ -42,7 +18,7 @@ namespace XmlFileTradeData
         /// </summary>
         /// <param name="stream">Stream to read</param>
         /// <returns>Single package of trade data that has been loaded</returns>
-        public TradeDataPackage LoadTradeData(Stream stream)
+        public override TradeDataPackage LoadTradeData(Stream stream)
         {
             var dataList = new List<TradeData>();
             using (XmlReader reader = XmlReader.Create(stream))
@@ -74,6 +50,14 @@ namespace XmlFileTradeData
             }
 
             return new TradeDataPackage(dataList);
+        }
+
+        /// <summary>
+        /// Supported file type extension (e.g. ".xml")
+        /// </summary>
+        protected override string SupportedFileTypeExtension
+        {
+            get { return ".xml"; }
         }
     }
 }

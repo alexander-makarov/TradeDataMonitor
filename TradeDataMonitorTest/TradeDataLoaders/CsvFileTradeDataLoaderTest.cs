@@ -3,59 +3,59 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelpers;
 using TradeDataMonitoring;
+using TradeDataMonitoring.TradeDataLoaders;
 
-namespace TradeDataMonitorTest
+namespace TradeDataMonitorTest.TradeDataLoaders
 {
     [TestClass]
-    public class TxtFileTradeDataLoaderTest
+    public class CsvFileTradeDataLoaderTest
     {
-        private TxtFileTradeDataLoader _loader; 
+        private CsvFileTradeDataLoader _loader;
 
         [TestInitialize]
         public void InitializeTest()
         {
-            _loader = new TxtFileTradeDataLoader();
+            _loader = new CsvFileTradeDataLoader();
         }
 
         [TestMethod]
-        public void CouldLoad_TxtFile_NoException()
+        public void CouldLoad_CsvFile_NoException()
         {
             // arrange
-            var csvFilePath = "X:\\folder1\\folder2\\tradedata.txt";
+            var csvFilePath = "X:\\folder1\\folder2\\tradedata.csv";
             var csvFile = new FileInfo(csvFilePath);
 
             // act
             var couldLoad = _loader.CouldLoad(csvFile);
 
             // assert
-            Assert.IsTrue(couldLoad, "Should be able to load .txt files");
+            Assert.IsTrue(couldLoad, "Should be able to load .csv files");
         }
 
         [TestMethod]
         public void CouldLoad_NotSupportedFile_NoException()
         {
             // arrange
-            var csvFilePath = "X:\\folder1\\folder2\\tradedata.xml";
-            var csvFile = new FileInfo(csvFilePath);
+            var xmlFilePath = "X:\\folder1\\folder2\\tradedata.xml";
+            var xmlFile = new FileInfo(xmlFilePath);
 
             // act
-            var couldLoad = _loader.CouldLoad(csvFile);
+            var couldLoad = _loader.CouldLoad(xmlFile);
 
             // assert
-            Assert.IsFalse(couldLoad, "Should not be able to load any files except .txt ones");
+            Assert.IsFalse(couldLoad, "Should not be able to load any files except .csv ones");
         }
 
         [TestMethod]
-        public void LoadTradeData_TxtFile_NoException()
+        public void LoadTradeData_CsvFile_NoException()
         {
             // arrange
-            const string txtFileAsString =
-              @"Date;Open;High;Low;Close;Volume
-                2014-5-20;30.16;30.39;30.02;30.17;1478200
-                2014-5-17;29.77;30.26;29.77;30.26;2481400
-                2014-5-16;29.78;29.94;29.55;29.67;1077000";
-            var fileInMemory = Helpers.GenerateStreamFromString(txtFileAsString);
-            #region prepare expected values
+            const string csvFileAsString = 
+              @"2014-5-20,30.16,30.39,30.02,30.17,1478200
+                2014-5-17,29.77,30.26,29.77,30.26,2481400
+                2014-5-16,29.78,29.94,29.55,29.67,1077000";
+            var csvFileInMemory = Helpers.GenerateStreamFromString(csvFileAsString);
+            #region prepare expected values from csv format
             var expectedPackage = new TradeDataPackage();
             expectedPackage.TradeDataList.Add(
                 new TradeData(
@@ -87,7 +87,7 @@ namespace TradeDataMonitorTest
             #endregion
 
             // act
-            var package = _loader.LoadTradeData(fileInMemory);
+            var package = _loader.LoadTradeData(csvFileInMemory);
 
             // assert
             Assert.IsTrue(package.TradeDataList.Count == 3); // check the count
@@ -101,31 +101,29 @@ namespace TradeDataMonitorTest
         }
 
         [TestMethod]
-        public void LoadTradeData_EmptyTxtFile_NoException()
+        public void LoadTradeData_EmptyCsvFile_NoException()
         {
             // arrange
-            const string txtFileAsString = "";
-            var fileInMemory = Helpers.GenerateStreamFromString(txtFileAsString);
+            const string csvFileAsString = "";
+            var csvFileInMemory = Helpers.GenerateStreamFromString(csvFileAsString);
 
             // act
-            var package = _loader.LoadTradeData(fileInMemory);
+            var package = _loader.LoadTradeData(csvFileInMemory);
 
             // assert
             Assert.IsTrue(package.TradeDataList.Count == 0); // check the count
         }
 
         [TestMethod]
-        public void LoadTradeData_CorruptedTxtFile_NoException()
+        public void LoadTradeData_CorruptedCsvFile_NoException()
         {
             // arrange
-            const string txtFileAsString =
-              @"Date;Open;High;Low;Close;Volume
-                2014-5-20;30.16;30.39;30.02;30.17;1478200
+            const string csvFileAsString =
+              @"2014-5-20,30.16,30.39,30.02,30.17,1478200
                 2014-##this-line-is-somewhat-corrupted####.26,00-jkl277,30.26,2481j400
-                2014-5-16;29.78;29.94;29.55;29.67;1077000";
-
-            var fileInMemory = Helpers.GenerateStreamFromString(txtFileAsString);
-            #region prepare expected values
+                2014-5-16,29.78,29.94,29.55,29.67,1077000";
+            var csvFileInMemory = Helpers.GenerateStreamFromString(csvFileAsString);
+            #region prepare expected values from csv format
             var expectedPackage = new TradeDataPackage();
             expectedPackage.TradeDataList.Add(
                 new TradeData(
@@ -148,7 +146,7 @@ namespace TradeDataMonitorTest
             #endregion
 
             // act
-            var package = _loader.LoadTradeData(fileInMemory);
+            var package = _loader.LoadTradeData(csvFileInMemory);
 
             // assert
             Assert.IsTrue(package.TradeDataList.Count == 2); // check the count

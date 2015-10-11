@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace TradeDataMonitoring
+namespace TradeDataMonitoring.TradeDataLoaders
 {
     /// <summary>
     /// Common interface for trade data loaders

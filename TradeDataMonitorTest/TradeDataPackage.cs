@@ -15,12 +15,6 @@ namespace TradeDataMonitorTest
         public void Constuctor_NoParams_NoException()
         {
             // arrange
-            var date = new DateTime(2013, 5, 20);
-            var open = new decimal(30.16);
-            var high = new decimal(30.39);
-            var low = new decimal(30.02);
-            var close = new decimal(30.17);
-            var volume = 1478200;
 
             // act
             var package = new TradeDataPackage();
