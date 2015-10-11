@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace TradeDataMonitoring.TradeDataLoaders
 {
@@ -18,6 +19,11 @@ namespace TradeDataMonitoring.TradeDataLoaders
         /// <returns>true if able to load data</returns>
         public bool CouldLoad(FileInfo file)
         {
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
+
             // checking the appropriate extension:
             return file.Extension.TrimStart('.') == SupportedFileTypeExtension.TrimStart('.');
         }
@@ -29,6 +35,11 @@ namespace TradeDataMonitoring.TradeDataLoaders
         /// <returns>single package of trade data that has been loaded</returns>
         public TradeDataPackage LoadTradeData(FileInfo file)
         {
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
+
             using (FileStream fs = File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var bs = new BufferedStream(fs))
             {

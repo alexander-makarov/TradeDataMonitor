@@ -27,6 +27,11 @@ namespace TradeDataMonitoring.TradeDataLoaders
         /// <param name="loaders">collection of ITradeDataLoader</param>
         public CompositeTradeDataLoader(IEnumerable<ITradeDataLoader> loaders)
         {
+            if (loaders == null)
+            {
+                throw new ArgumentNullException("loaders");
+            }
+
             _loaders = loaders;
         }
 

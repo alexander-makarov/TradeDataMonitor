@@ -62,19 +62,18 @@ namespace TradeDataMonitorTest.TradeDataLoaders
             const string csvFilePath = "X:\\folder1\\folder2\\tradedata.csv";
             var csvFile = new FileInfo(csvFilePath);
 
-            var csvLoader = A.Fake<ITradeDataLoader>();
-            csvLoader.CallsTo(l => l.CouldLoad(csvFile)).Returns(true); // support .csv
+            var csvLoader = A.Fake<ITradeDataLoader>(); // setup first mocked loader
+            csvLoader.CallsTo(l => l.CouldLoad(csvFile)).Returns(true); // supports .csv
             csvLoader.CallsTo(l => l.LoadTradeData(csvFile))
                 .WithAnyArguments()
                 .Returns(new TradeDataPackage()); // returns empty package from file
 
-
-            var notCsvLoader = A.Fake<ITradeDataLoader>();
+            var notCsvLoader = A.Fake<ITradeDataLoader>(); // setup second mocked loader
             notCsvLoader.CallsTo(l => l.CouldLoad(csvFile)).Returns(false); // does not support .csv
 
             // create composite to test:
             var loaders = new List<ITradeDataLoader> { csvLoader, notCsvLoader };
-            var loader = new CompositeTradeDataLoader(loaders);
+            var loader = new CompositeTradeDataLoader(loaders); // inject
 
             // act
             loader.LoadTradeData(csvFile); // try load csv

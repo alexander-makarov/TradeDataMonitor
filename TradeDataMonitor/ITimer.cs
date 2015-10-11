@@ -1,11 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace TradeDataMonitoring
 {
     /// <summary>
     /// Interface to mock System.Threading.Timer
     /// </summary>
-    public interface ITimer
+    public interface ITimer : IDisposable
     {
         /// <summary>
         /// Changes the start time and the interval between method invocations for a timer, using 32-bit signed integers to measure time intervals.

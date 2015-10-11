@@ -44,6 +44,27 @@ namespace TradeDataMonitoring
 
         public TradeDataMonitor(IFileSystemManager fileSystemManager, ITimer timer, ITradeDataLoader tradeDataLoader,  int timerPeriodSeconds, string monitoringDirectory)
         {
+            if (fileSystemManager == null)
+            {
+                throw new ArgumentNullException("fileSystemManager");
+            }
+            if (timer == null)
+            {
+                throw new ArgumentNullException("timer");
+            }
+            if (tradeDataLoader == null)
+            {
+                throw new ArgumentNullException("tradeDataLoader");
+            }
+            if (String.IsNullOrWhiteSpace(monitoringDirectory))
+            {
+                throw new ArgumentException("monitoringDirectory");
+            }
+            if (timerPeriodSeconds < -1)
+            {
+                throw new ArgumentOutOfRangeException("timerPeriodSeconds");
+            }
+
             _fileSystemManager = fileSystemManager;
             _tradeDataLoader = tradeDataLoader;
             _timer = timer;

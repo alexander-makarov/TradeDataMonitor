@@ -27,7 +27,7 @@ namespace TradeDataMonitoring
         /// Creates package of trade data
         /// </summary>
         /// <param name="dataList">colection of TradeData elements</param>
-        public TradeDataPackage(List<TradeData> dataList) : this()
+        public TradeDataPackage(List<TradeData> dataList)
         {
             TradeDataList = dataList;
         }

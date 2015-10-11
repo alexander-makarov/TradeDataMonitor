@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
 using TradeDataMonitorApp.MvvmHelpers;
@@ -13,6 +14,15 @@ namespace TradeDataMonitorApp.ViewModels
     {
         public TradeDataMonitorViewModel(ITradeDataMonitor tradeDataMonitor, IDispatcher dispatcher)
         {
+            if (tradeDataMonitor == null)
+            {
+                throw new ArgumentNullException("tradeDataMonitor");
+            }
+            if (dispatcher == null)
+            {
+                throw new ArgumentNullException("dispatcher");
+            }
+
             _tradeDataMonitor = tradeDataMonitor;
             _dispatcher = dispatcher;
             _tradeDataMonitor.TradeDataUpdate += TradeDataMonitorOnTradeDataUpdate; // subscribe for trade data updates
@@ -27,6 +37,9 @@ namespace TradeDataMonitorApp.ViewModels
         /// <param name="tradeDataPackage">update trade data package</param>
         private void TradeDataMonitorOnTradeDataUpdate(object sender, TradeDataPackage tradeDataPackage)
         {
+            if(tradeDataPackage == null)
+                return;
+
             // adding to TradeDataList to let UI display new data
             _dispatcher.Invoke(() => tradeDataPackage.TradeDataList.ForEach(data => _tradeDataList.Add(data)));
         }

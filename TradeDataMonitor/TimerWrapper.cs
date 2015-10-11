@@ -35,5 +35,14 @@ namespace TradeDataMonitoring
             }
             return _timer.Change(dueTime, period);
         }
+
+        public void Dispose()
+        {
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
+            GC.SuppressFinalize(this);
+        }
     }
 }
