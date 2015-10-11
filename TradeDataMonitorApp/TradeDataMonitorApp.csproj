@@ -61,11 +61,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppSettings.cs" />
+    <Compile Include="TradeDataMonitorAppModule.cs" />
+    <Compile Include="TradeDataMonitorAppSettings.cs" />
     <Compile Include="AssemblyHelpers.cs" />
+    <Compile Include="ConfigurationManagerAdapter.cs" />
     <Compile Include="Configuration\TradeDataLoaderElement.cs" />
     <Compile Include="Configuration\TradeDataLoaderElementCollection.cs" />
     <Compile Include="Configuration\TradeDataLoadersSection.cs" />
+    <Compile Include="IConfigurationManager.cs" />
     <Compile Include="MvvmHelpers\RelayCommand.cs" />
     <Compile Include="MvvmHelpers\NotifyPropertyChangedInvocatorAttribute.cs" />
     <Compile Include="ViewModels\TradeDataMonitorViewModel.cs" />

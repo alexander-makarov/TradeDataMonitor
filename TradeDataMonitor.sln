@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlFileTradeDataTest", "Xml
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "TestHelpers\TestHelpers.csproj", "{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeDataMonitorAppTest", "TradeDataMonitorAppTest\TradeDataMonitorAppTest.csproj", "{2AD74760-80F9-4540-B22A-B962FC620258}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AD74760-80F9-4540-B22A-B962FC620258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AD74760-80F9-4540-B22A-B962FC620258}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AD74760-80F9-4540-B22A-B962FC620258}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AD74760-80F9-4540-B22A-B962FC620258}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{2177A527-039B-464A-BD89-F0D758CE1B20} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
 		{FB8C27DE-E5E6-4663-A194-3B28E57E58B4} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
 		{711BF94C-8395-43DB-8C11-AFEEAE4C73FE} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
+		{2AD74760-80F9-4540-B22A-B962FC620258} = {C68B1FE1-1581-4111-8A7C-04010CCA61E3}
 	EndGlobalSection
 EndGlobal

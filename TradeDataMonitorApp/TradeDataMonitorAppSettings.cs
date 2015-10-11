@@ -10,15 +10,19 @@ namespace TradeDataMonitorApp
     /// <summary>
     /// Class loads application setting from app.config
     /// </summary>
-    public static class AppSettings
+    public static class TradeDataMonitorAppSettings
     {
         /// <summary>
-        /// True when application settings has been loaded succesfully by <see cref="AppSettings.Load"/>
+        /// True when application settings has been loaded succesfully by <see cref="TradeDataMonitorAppSettings.Load"/>
         /// </summary>
         private static bool _isLoaded = false;
         private static readonly List<ITradeDataLoader> _tradeDataLoaders = new List<ITradeDataLoader>();
         private static int _monitoringPeriodSeconds = -1;
         private static string _monitoringDirectoryPath = null;
+        /// <summary>
+        /// Injected dependency filed for System.Configuration.ConfigurationManager
+        /// </summary>
+        private static readonly ConfigurationManagerAdapter _configurationManager = new ConfigurationManagerAdapter();
 
         /// <summary>
         /// Collection of ITradeDataLoader instances constucted at runtime from configuration file
@@ -70,10 +74,32 @@ namespace TradeDataMonitorApp
         /// </summary>
         public static void Load()
         {
+            Load(_configurationManager);
+        }
+
+        /// <summary>
+        /// Load and validate application configuration
+        /// <remarks>injected method for unit-testing</remarks>
+        /// </summary>
+        public static void Load(IConfigurationManager configurationManager)
+        {
             try
             {
+                // load settings:
+                _monitoringPeriodSeconds = Int32.Parse(configurationManager.AppSettings["UpdatesMonitoringPeriodSeconds"]);
+                if (_monitoringPeriodSeconds < 0 )
+                {
+                    throw new ConfigurationErrorsException(String.Format("Incorrect value - {0} for 'UpdatesMonitoringPeriodSeconds'", _monitoringPeriodSeconds));
+                }
+
+                _monitoringDirectoryPath = configurationManager.AppSettings["MonitoringDirectoryPath"];
+                if (!Directory.Exists(_monitoringDirectoryPath))
+                {
+                    throw new ConfigurationErrorsException(String.Format("Directory 'MonitoringDirectoryPath' doesn't exists - {0}", _monitoringDirectoryPath));
+                }
+
                 #region load all specified TradeDataLoaders at runtime from app.config
-                var loaders = ConfigurationManager.GetSection("TradeDataLoadersSection") as TradeDataLoadersSection; // get app.config section
+                var loaders = configurationManager.GetSection("TradeDataLoadersSection") as TradeDataLoadersSection; // get app.config section
                 if (loaders == null)
                 {
                     throw new ConfigurationErrorsException("Can't retrieve <section name=\"TradeDataLoadersSection\".../> from 'TradeDataMonitorApp.exe.config'");
@@ -91,19 +117,6 @@ namespace TradeDataMonitorApp
                 }
                 #endregion
 
-                // load other settings:
-                _monitoringPeriodSeconds = Int32.Parse(ConfigurationManager.AppSettings["UpdatesMonitoringPeriodSeconds"]);
-                if (_monitoringPeriodSeconds < 0 )
-                {
-                    throw new ConfigurationErrorsException(String.Format("Incorrect value - {0} for 'UpdatesMonitoringPeriodSeconds'", _monitoringPeriodSeconds));
-                }
-
-                _monitoringDirectoryPath = ConfigurationManager.AppSettings["MonitoringDirectoryPath"];
-                if (!Directory.Exists(_monitoringDirectoryPath))
-                {
-                    throw new ConfigurationErrorsException(String.Format("Directory 'MonitoringDirectoryPath' doesn't exists - {0}", _monitoringDirectoryPath));
-                }
-
                 _isLoaded = true; // succesfully loaded
             }
             catch (ConfigurationErrorsException)
@@ -112,9 +125,8 @@ namespace TradeDataMonitorApp
             }
             catch (Exception exc)
             {
-                throw new ConfigurationErrorsException("Can't load AppSettings from 'TradeDataMonitorApp.exe.config'", exc);
+                throw new ConfigurationErrorsException("Can't load TradeDataMonitorAppSettings from 'TradeDataMonitorApp.exe.config'", exc);
             }
-
         }
     }
 }

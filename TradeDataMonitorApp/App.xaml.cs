@@ -26,20 +26,17 @@ namespace TradeDataMonitorApp
             {
                 base.OnStartup(e);
 
-                AppSettings.Load(); // load settings from app.config
+                TradeDataMonitorAppSettings.Load(); // load settings from app.config
                 
-                IKernel kernel = new StandardKernel();
-                kernel.Bind<IFileSystemManager>().To<FileSystemManager>();
-                kernel.Bind<ITimer>().To<TimerAdaper>();
-                kernel.Bind<ITradeDataMonitor>().To<TradeDataMonitor>();
+                IKernel kernel = new StandardKernel(new TradeDataMonitorAppModule()); // ninject bindings
                 
                 // bundle all loaders within one CompositeTradeDataLoader to transfer into TradeDataMonitor
-                var compositeLoader = new CompositeTradeDataLoader(AppSettings.TradeDataLoaders);
+                var compositeLoader = new CompositeTradeDataLoader(TradeDataMonitorAppSettings.TradeDataLoaders);
 
                 // create TradeDataMonitor class - the model
                 var model = kernel.Get<ITradeDataMonitor>(
-                     new ConstructorArgument("timerPeriodSeconds", AppSettings.MonitoringPeriodSeconds),
-                     new ConstructorArgument("monitoringDirectory", AppSettings.MonitoringDirectoryPath),
+                     new ConstructorArgument("timerPeriodSeconds", TradeDataMonitorAppSettings.MonitoringPeriodSeconds),
+                     new ConstructorArgument("monitoringDirectory", TradeDataMonitorAppSettings.MonitoringDirectoryPath),
                      new ConstructorArgument("tradeDataLoader", compositeLoader));
 
                 var viewModel = new TradeDataMonitorViewModel(model); // initialize ViewModel with TradeDataMonitor

@@ -39,7 +39,7 @@ namespace TradeDataMonitorApp.Configuration
         /// Gets the TradeDataLoaderElementCollection element.
         /// </summary>
         [ConfigurationProperty("TradeDataLoaders")]
-        public TradeDataLoaderElementCollection TradeDataLoaders
+        public virtual TradeDataLoaderElementCollection TradeDataLoaders
         {
             get { return (TradeDataLoaderElementCollection)base[s_propElement]; }
         }

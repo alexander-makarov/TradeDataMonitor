@@ -63,6 +63,16 @@ namespace TradeDataMonitorApp.Configuration
         {
             return (element as TradeDataLoaderElement).Class;
         }
+
+        /// <summary>
+        /// Method implemented for unit-testing only
+        /// </summary>
+        public void Add(TradeDataLoaderElement element)
+        {
+            LockItem = false;  // the workaround
+            BaseAdd(element);
+        }
+        
         #endregion
     }
 }
