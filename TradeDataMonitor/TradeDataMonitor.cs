@@ -15,7 +15,7 @@ namespace TradeDataMonitoring
     /// one might find useful to look at FileSystemWatcher class:
     /// https://msdn.microsoft.com/en-us/library/system.io.filesystemwatcher(v=vs.110).aspx </remarks>
     /// </summary>
-    public class TradeDataMonitor : INotifyPropertyChanged
+    public class TradeDataMonitor : ITradeDataMonitor, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
 
@@ -50,11 +50,7 @@ namespace TradeDataMonitoring
             private set { _isMonitoringStarted = value; OnPropertyChanged();}
         }
 
-        public TradeDataMonitor(ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, string monitoringDirectory)
-            : this(new FileSystemManager(), tradeDataLoader, timerPeriodSeconds, new TimerAdaper(), monitoringDirectory)
-        {
-        }
-        public TradeDataMonitor(IFileSystemManager fileSystemManager, ITradeDataLoader tradeDataLoader, int timerPeriodSeconds, ITimer timer, string monitoringDirectory)
+        public TradeDataMonitor(IFileSystemManager fileSystemManager, ITimer timer, ITradeDataLoader tradeDataLoader,  int timerPeriodSeconds, string monitoringDirectory)
         {
             _fileSystemManager = fileSystemManager;
             _tradeDataLoader = tradeDataLoader;
@@ -123,7 +119,7 @@ namespace TradeDataMonitoring
 
 
         /// <summary>
-        /// Event to notify about trade data updates
+        /// Event to notify about detected trade data updates
         /// </summary>
         public event Action<TradeDataPackage> TradeDataUpdate;
         protected virtual void OnTradeDataUpdate(TradeDataPackage obj)
@@ -156,6 +152,5 @@ namespace TradeDataMonitoring
                     }
                 });
         }
-
     }
 }

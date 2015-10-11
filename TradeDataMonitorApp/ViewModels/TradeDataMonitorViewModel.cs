@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using TradeDataMonitorApp.MvvmHelpers;
 using TradeDataMonitoring;
 
@@ -16,8 +10,8 @@ namespace TradeDataMonitorApp.ViewModels
 {
     public class TradeDataMonitorViewModel : ViewModelBase
     {
-        private readonly TradeDataMonitor _tradeDataMonitor;
-        public TradeDataMonitorViewModel(TradeDataMonitor tradeDataMonitor)
+        private readonly ITradeDataMonitor _tradeDataMonitor;
+        public TradeDataMonitorViewModel(ITradeDataMonitor tradeDataMonitor)
         {
             _tradeDataMonitor = tradeDataMonitor;
             _tradeDataMonitor.TradeDataUpdate += TradeDataMonitorOnTradeDataUpdate;

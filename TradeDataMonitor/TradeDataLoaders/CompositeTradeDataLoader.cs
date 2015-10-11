@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,6 +8,11 @@ namespace TradeDataMonitoring.TradeDataLoaders
     /// <summary>
     /// CompositeTradeDataLoader encapsulates collection of loaders 
     /// and let clients of the class to work with them as with a single ITradeDataLoader instance
+    /// 
+    /// <remarks>
+    /// Actually, this class might be eliminated, if we move the IEnumerable[ITradeDataLoader]
+    /// as additional dependency into TradeDataMonitor class
+    /// </remarks>
     /// </summary>
     public class CompositeTradeDataLoader : ITradeDataLoader
     {

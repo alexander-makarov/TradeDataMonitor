@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITradeDataMonitor.cs" />
     <Compile Include="TradeDataLoaders\CompositeTradeDataLoader.cs" />
     <Compile Include="TradeDataLoaders\CsvFileTradeDataLoader.cs" />
     <Compile Include="FileSystemManager.cs" />
